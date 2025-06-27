@@ -1,25 +1,26 @@
 import type { Post, Author, Category } from '@/lib/types';
 
 const authors: Record<string, Author> = {
-  'admin-01': {
-    id: 'admin-01',
-    name: 'Ryha Security Team',
+  'velluraju-c': {
+    id: 'velluraju-c',
+    name: 'Velluraju C',
     avatarUrl: 'https://placehold.co/100x100.png',
-    bio: 'Core security research and development team at Ryha. Specializing in offensive security and threat intelligence.',
+    bio: 'Solo architect, student, and hacker behind Ryha. Building the future of AI and autonomous systems.',
   },
-  'ai-dev': {
-    id: 'ai-dev',
-    name: 'Dr. Evelyn Reed',
+  'ryha-team': {
+    id: 'ryha-team',
+    name: 'Ryha Team',
     avatarUrl: 'https://placehold.co/100x100.png',
-    bio: 'Lead AI researcher focusing on the intersection of artificial intelligence and cybersecurity warfare.',
+    bio: 'The engineering and research team at Ryha, dedicated to building secure and intelligent digital worlds.',
   },
 };
 
 const categories: Record<string, Category> = {
   'cve': { id: 'cve', name: 'CVE' },
-  'ai-sec': { id: 'ai-sec', name: 'AI Security' },
+  'ai': { id: 'ai', name: 'AI' },
   'pentesting': { id: 'pentesting', name: 'Pentesting' },
   'updates': { id: 'updates', name: 'Updates' },
+  'cyberwarfare': { id: 'cyberwarfare', name: 'Cyberwarfare' },
 };
 
 const posts: Post[] = [
@@ -50,17 +51,17 @@ A simple proof-of-concept involves uploading a PHP file with a \`.jpg\` extensio
 
 ## Mitigation
 
-The Ryha Security Team urges all users of Nova-Framework to **update to version 3.1.5 or later immediately**. This version includes a patch that correctly validates file MIME types and enforces stricter file permission policies.
+The Ryha team urges all users of Nova-Framework to **update to version 3.1.5 or later immediately**. This version includes a patch that correctly validates file MIME types and enforces stricter file permission policies.
 
 For those unable to update immediately, a temporary workaround is to disable the file upload module in your application's configuration.
 
-> "This is one of the most severe vulnerabilities we've seen this year. The ease of exploitation makes it a prime target for attackers," says our lead security analyst.
+> "At Ryha, we see security not as a feature, but as the bedrock of digital trust. Vulnerabilities like this are a reminder of why our autonomous, AI-driven security approach is critical for the future." – Velluraju C, Founder
 
 We will continue to monitor the situation and provide updates as they become available. Stay vigilant.
     `,
     imageUrl: 'https://placehold.co/600x400.png',
     imageHint: 'server room',
-    author: authors['admin-01'],
+    author: authors['ryha-team'],
     category: categories['cve'],
     tags: ['RCE', 'Vulnerability', 'Nova-Framework'],
     publishedAt: '2024-07-20T10:00:00Z',
@@ -93,8 +94,8 @@ The age of AI cyberwarfare is here. Preparing for this new reality is not just a
     `,
     imageUrl: 'https://placehold.co/600x400.png',
     imageHint: 'abstract AI',
-    author: authors['ai-dev'],
-    category: categories['ai-sec'],
+    author: authors['velluraju-c'],
+    category: categories['ai'],
     tags: ['AI', 'Cyberwarfare', 'Machine Learning'],
     publishedAt: '2024-07-18T14:30:00Z',
     focusKeyword: 'AI Cyberwarfare',
@@ -102,10 +103,10 @@ The age of AI cyberwarfare is here. Preparing for this new reality is not just a
   {
     id: '3',
     slug: 'pentesting-report-q2-2024',
-    title: 'Ryha Pulse: Q2 2024 Pentesting Report',
+    title: 'Ryha: Q2 2024 Pentesting Report',
     excerpt: 'Our latest quarterly report reveals the most common vulnerabilities discovered during our penetration testing engagements in Q2 2024.',
     content: `
-# Ryha Pulse: Q2 2024 Pentesting Report
+# Ryha: Q2 2024 Pentesting Report
 
 Our team conducted over 50 penetration tests in the second quarter of 2024. This report summarizes our findings and highlights the most prevalent security weaknesses across various industries.
 
@@ -123,7 +124,7 @@ The data shows a clear trend: a lack of basic security hygiene is the root cause
     `,
     imageUrl: 'https://placehold.co/600x400.png',
     imageHint: 'code security',
-    author: authors['admin-01'],
+    author: authors['ryha-team'],
     category: categories['pentesting'],
     tags: ['Pentesting', 'Security Report', 'Vulnerabilities'],
     publishedAt: '2024-07-15T09:00:00Z',

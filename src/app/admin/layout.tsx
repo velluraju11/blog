@@ -38,7 +38,7 @@ export default function AdminLayout({
         <SidebarHeader>
           <div className="flex items-center gap-2 p-2">
             <ShieldCheck className="w-8 h-8 text-primary" />
-            <span className="font-headline text-lg font-semibold">Ryha Pulse</span>
+            <span className="font-headline text-lg font-semibold">Ryha</span>
           </div>
         </SidebarHeader>
         <SidebarContent>

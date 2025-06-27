@@ -10,11 +10,10 @@ export default function Footer() {
           <div className="md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
               <ShieldCheck className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold font-headline text-foreground">Ryha Pulse</span>
+              <span className="text-xl font-bold font-headline text-foreground">Ryha</span>
             </div>
             <p className="max-w-md text-sm">
-              The latest pulse on technology and security from the experts at Ryha.
-              Stay informed, stay secure.
+              Engineering ultra-intelligent, self-optimizing ecosystems that eliminate complexity, remove digital stress, and make every interaction fast, secure, and human-focused.
             </p>
           </div>
           <div>

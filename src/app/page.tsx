@@ -4,26 +4,27 @@ import { Search } from "lucide-react";
 import { getPosts } from "@/lib/data";
 import BlogPostCard from "@/components/blog-post-card";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 const categories = ["AI", "CVE", "Pentesting", "Exploits", "Cyberwarfare", "Updates"];
 
 export default async function Home() {
   const posts = await getPosts();
-  const recentPosts = posts.slice(0, 6);
+  const recentPosts = posts.slice(0, 3);
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
       <section className="text-center py-16 md:py-24 animate-fade-in-up">
         <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter mb-4">
-          Ryha <span className="text-primary">Pulse</span>
+          Ryha – The Future, Engineered for Everyone
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-          Your source for cutting-edge IT insights, security alerts, and exploit analysis. Stay ahead of the curve.
+          A visionary force reshaping the digital era through cutting-edge AI, autonomous systems, and hyper-secure architecture.
         </p>
         <div className="mt-8 max-w-lg mx-auto flex items-center gap-2">
           <Input
             type="search"
-            placeholder="Search CVE, exploits, articles..."
+            placeholder="Search for posts on AI, security..."
             className="flex-1"
           />
           <Button type="submit" size="icon">
@@ -45,6 +46,11 @@ export default async function Home() {
               <BlogPostCard post={post} />
             </div>
           ))}
+        </div>
+        <div className="text-center mt-12">
+          <Button asChild variant="outline">
+            <Link href="/blog">View All Posts</Link>
+          </Button>
         </div>
       </section>
     </div>

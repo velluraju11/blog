@@ -11,7 +11,6 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/blog", label: "Blog" },
   { href: "/about", label: "About" },
-  { href: "/admin/dashboard", label: "Dashboard" },
 ];
 
 export default function Header() {
@@ -35,7 +34,7 @@ export default function Header() {
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <ShieldCheck className="h-6 w-6 text-primary" />
-            <span className="font-bold font-headline">Ryha Pulse</span>
+            <span className="font-bold font-headline">Ryha</span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
             {navLinks.map((link) => (
@@ -55,7 +54,7 @@ export default function Header() {
             <SheetContent side="left">
               <Link href="/" className="mr-6 flex items-center space-x-2 mb-6">
                 <ShieldCheck className="h-6 w-6 text-primary" />
-                <span className="font-bold font-headline">Ryha Pulse</span>
+                <span className="font-bold font-headline">Ryha</span>
               </Link>
               <nav className="flex flex-col space-y-4">
                 {navLinks.map((link) => (
@@ -78,7 +77,7 @@ export default function Header() {
         <div className="flex flex-1 items-center justify-end space-x-4">
           <Button asChild>
             <a href="https://ryha.com" target="_blank" rel="noopener noreferrer">
-              Visit Main Site
+              Visit Ryha.com
             </a>
           </Button>
         </div>
