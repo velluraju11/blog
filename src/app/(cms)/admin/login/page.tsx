@@ -1,57 +1,21 @@
-"use client";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { login } from './actions'
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ShieldCheck, Terminal } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { createClient } from "@/lib/supabase/client";
+import { ShieldCheck, Terminal, AlertTriangle } from "lucide-react";
 
-export default function LoginPage() {
-  const router = useRouter();
-  const { toast } = useToast();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    
-    setIsLoading(false);
-
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Login Failed",
-        description: error.message,
-      });
-    } else {
-      toast({
-        title: "Login Successful",
-        description: "Redirecting to dashboard...",
-      });
-      // This is the official, robust way to handle redirects after login.
-      // It re-fetches server components and allows the middleware to correctly
-      // handle the redirection based on the new auth state.
-      router.refresh();
-    }
-  };
-
+export default function LoginPage({
+  searchParams,
+}: {
+  searchParams: { message: string };
+}) {
   return (
     <div className="flex items-center justify-center min-h-screen bg-background px-4">
       <Card className="w-full max-w-sm">
-        <form onSubmit={handleLogin}>
+        <form action={login}>
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
               <ShieldCheck className="w-12 h-12 text-primary" />
@@ -60,6 +24,15 @@ export default function LoginPage() {
             <CardDescription>Enter your credentials to access the dashboard.</CardDescription>
           </CardHeader>
           <CardContent>
+             {searchParams.message && (
+              <Alert variant="destructive" className="mb-4">
+                  <AlertTriangle className="h-4 w-4" />
+                  <AlertTitle>Login Failed</AlertTitle>
+                  <AlertDescription>
+                      {searchParams.message}
+                  </AlertDescription>
+              </Alert>
+            )}
             <Alert>
                 <Terminal className="h-4 w-4" />
                 <AlertTitle>Admin Credentials</AlertTitle>
@@ -72,31 +45,27 @@ export default function LoginPage() {
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="admin@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                   required
-                  disabled={isLoading}
                 />
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
+                  name="password"
                   type="password"
                   placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
                   required
-                  disabled={isLoading}
                 />
               </div>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Signing In..." : "Sign In"}
+            <Button type="submit" className="w-full">
+              Sign In
             </Button>
           </CardFooter>
         </form>
