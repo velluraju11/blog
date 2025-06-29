@@ -1,16 +1,10 @@
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
-import { getPosts } from "@/lib/data";
+import { getFeaturedPosts } from "@/lib/data";
 import BlogPostCard from "@/components/blog-post-card";
-import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 
-const categories = ["AI", "CVE", "Pentesting", "Manifesto", "Cyberwarfare", "Updates"];
-
 export default async function Home() {
-  const posts = await getPosts();
-  const recentPosts = posts.slice(0, 3);
+  const featuredPosts = await getFeaturedPosts();
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
@@ -32,9 +26,9 @@ export default async function Home() {
       </section>
 
       <section className="py-12">
-        <h2 className="font-headline text-3xl font-bold text-center mb-10">Latest Dispatches</h2>
+        <h2 className="font-headline text-3xl font-bold text-center mb-10">From the Blog</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {recentPosts.map((post, index) => (
+          {featuredPosts.map((post, index) => (
             <div key={post.id} style={{ animationDelay: `${index * 100}ms`}} className="animate-fade-in-up">
               <BlogPostCard post={post} />
             </div>

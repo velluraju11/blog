@@ -23,4 +23,6 @@ export interface Post {
   tags: string[];
   publishedAt: string;
   focusKeyword?: string;
+  isFeatured?: boolean;
+  featuredOrder?: number;
 }

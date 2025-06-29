@@ -66,6 +66,8 @@ This is just the beginning. Welcome to the revolution.
     category: categories['manifesto'],
     tags: ['Manifesto', 'Privacy', 'Ryha OS', 'AI'],
     publishedAt: '2024-07-22T09:00:00Z',
+    isFeatured: true,
+    featuredOrder: 1,
   },
   {
     id: '1',
@@ -109,6 +111,8 @@ We will continue to monitor the situation and provide updates as they become ava
     tags: ['RCE', 'Vulnerability', 'Nova-Framework'],
     publishedAt: '2024-07-20T10:00:00Z',
     focusKeyword: 'Nova-Framework Vulnerability',
+    isFeatured: true,
+    featuredOrder: 3,
   },
   {
     id: '2',
@@ -143,6 +147,8 @@ The age of AI cyberwarfare is here. Preparing for this new reality is not just a
     tags: ['AI', 'Cyberwarfare', 'Machine Learning'],
     publishedAt: '2024-07-18T14:30:00Z',
     focusKeyword: 'AI Cyberwarfare',
+    isFeatured: true,
+    featuredOrder: 2,
   },
   {
     id: '3',
@@ -180,6 +186,14 @@ export async function getPosts(): Promise<Post[]> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 100));
   return posts.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+}
+
+export async function getFeaturedPosts(): Promise<Post[]> {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 100));
+  return posts
+    .filter(post => post.isFeatured)
+    .sort((a, b) => (a.featuredOrder || 99) - (b.featuredOrder || 99));
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | undefined> {
