@@ -15,6 +15,7 @@ import { Switch } from "@/components/ui/switch";
 import { Loader2, Save } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { Post, Category, Author } from '@/lib/types';
+import RichTextEditor from '@/components/rich-text-editor';
 
 const formSchema = z.object({
   title: z.string().min(5, 'Title must be at least 5 characters.'),
@@ -44,7 +45,7 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
     defaultValues: {
       title: post.title,
       excerpt: post.excerpt,
-      content: post.content.replace(/<br \/>/g, '\n').replace(/<[^>]+>/g, ''),
+      content: post.content,
       categoryId: post.category.id,
       authorId: post.author.id,
       tags: post.tags.join(', '),
@@ -106,7 +107,9 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Full Content</FormLabel>
-                      <FormControl><Textarea placeholder="The full content of your blog post, in Markdown." {...field} className="h-96" /></FormControl>
+                      <FormControl>
+                        <RichTextEditor value={field.value} onChange={field.onChange} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}

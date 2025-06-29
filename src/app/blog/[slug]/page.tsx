@@ -93,7 +93,7 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
         
         <div className="prose dark:prose-invert">
-            <div dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />') }}></div>
+            <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
         </div>
 
         <div className="my-8 flex flex-wrap gap-2">
