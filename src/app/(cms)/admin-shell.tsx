@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
 import {
   SidebarProvider,
   Sidebar,
@@ -16,7 +15,7 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { Bot, Clock, Cog, FolderKanban, Home, LayoutDashboard, LogOut, Newspaper, ShieldCheck, Users } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { createClient } from "@/lib/supabase/client";
 
 const menuItems = [
     { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -35,57 +34,17 @@ export default function AdminShell({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [isClient, setIsClient] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (isClient) {
-      const authStatus = localStorage.getItem('RYHA_CMS_AUTH_TOKEN') === 'true';
-      setIsAuthenticated(authStatus);
-      setIsLoading(false);
-    }
-  }, [isClient, pathname]);
-
-  useEffect(() => {
-    if (!isLoading && isClient) {
-      if (!isAuthenticated && pathname !== '/admin/login') {
-        router.push('/admin/login');
-      }
-      if (isAuthenticated && pathname === '/admin/login') {
-        router.push('/admin/dashboard');
-      }
-    }
-  }, [isAuthenticated, isLoading, isClient, pathname, router]);
-
-  const handleLogout = () => {
-    localStorage.removeItem('RYHA_CMS_AUTH_TOKEN');
-    setIsAuthenticated(false);
-    router.push('/admin/login');
-  };
-  
-  if (isLoading || !isClient || (!isAuthenticated && pathname !== '/admin/login')) {
-    return (
-        <div className="flex h-screen w-screen items-center justify-center bg-background">
-            <div className="flex items-center space-x-4">
-                <Skeleton className="h-12 w-12 rounded-full" />
-                <div className="space-y-2">
-                    <Skeleton className="h-4 w-[250px]" />
-                    <Skeleton className="h-4 w-[200px]" />
-                </div>
-            </div>
-        </div>
-    );
-  }
 
   if (pathname === '/admin/login') {
     return <>{children}</>;
   }
 
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.refresh();
+  };
+  
   return (
     <SidebarProvider defaultOpen={false}>
       <Sidebar>

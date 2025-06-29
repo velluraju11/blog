@@ -11,9 +11,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Loader2, Save, KeyRound, Terminal } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { createClient } from '@/lib/supabase/client';
 
 const settingsFormSchema = z.object({
-  currentPassword: z.string().optional(),
   newPassword: z.string().min(8, { message: "Password must be at least 8 characters." }).optional().or(z.literal('')),
   confirmPassword: z.string().optional(),
 }).refine(data => {
@@ -24,14 +24,6 @@ const settingsFormSchema = z.object({
 }, {
     message: "New passwords do not match.",
     path: ["confirmPassword"],
-}).refine(data => {
-    if (data.newPassword && !data.currentPassword) {
-        return false;
-    }
-    return true;
-}, {
-    message: "Current password is required to set a new one.",
-    path: ["currentPassword"],
 });
 
 
@@ -44,40 +36,41 @@ export default function SettingsForm() {
     const form = useForm<SettingsFormData>({
         resolver: zodResolver(settingsFormSchema),
         defaultValues: {
-            currentPassword: '',
             newPassword: '',
             confirmPassword: '',
         }
     });
 
     const onSubmit = async (data: SettingsFormData) => {
+        if (!data.newPassword) {
+            toast({
+                title: "No Changes",
+                description: "You did not enter a new password.",
+            });
+            return;
+        }
+
         setIsLoading(true);
-        // In a real app, you would make an API call to a secure endpoint.
-        // For this prototype, we'll just simulate the action.
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        const updatedFields = [];
-        if (data.newPassword && data.currentPassword) {
-            updatedFields.push("password");
-        }
-        
-        let toastDescription = "No changes were made.";
-        if (updatedFields.length > 0) {
-            toastDescription = `Your ${updatedFields.join(' and ')} has been updated (simulated).`;
-        }
-
-        toast({
-            title: "Settings Saved!",
-            description: toastDescription,
-        });
-
+        const supabase = createClient();
+        const { error } = await supabase.auth.updateUser({ password: data.newPassword });
         setIsLoading(false);
-        // Reset fields for sensitive data
-        form.reset({ 
-            currentPassword: '', 
-            newPassword: '', 
-            confirmPassword: '' 
-        });
+
+        if (error) {
+            toast({
+                variant: "destructive",
+                title: "Error Updating Password",
+                description: error.message,
+            });
+        } else {
+            toast({
+                title: "Password Updated!",
+                description: "Your password has been changed successfully.",
+            });
+            form.reset({ 
+                newPassword: '', 
+                confirmPassword: '' 
+            });
+        }
     };
 
     return (
@@ -87,22 +80,9 @@ export default function SettingsForm() {
                     <Card>
                         <CardHeader>
                             <CardTitle>Change Password</CardTitle>
-                            <CardDescription>Update your login password. Leave fields blank to keep your current password.</CardDescription>
+                            <CardDescription>Update your login password. Your new password must be at least 8 characters long.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            <FormField
-                                control={form.control}
-                                name="currentPassword"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Current Password</FormLabel>
-                                        <FormControl>
-                                            <Input type="password" placeholder="••••••••" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
                             <FormField
                                 control={form.control}
                                 name="newPassword"

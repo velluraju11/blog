@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ShieldCheck, Terminal } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,28 +18,31 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate network delay
-    setTimeout(() => {
-      if (email === "admin@ryha.in" && password === "password") {
-        localStorage.setItem('RYHA_CMS_AUTH_TOKEN', 'true');
-        toast({
-          title: "Login Successful",
-          description: "Redirecting to dashboard...",
-        });
-        router.push("/admin/dashboard");
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Login Failed",
-          description: "Invalid credentials. Please try again.",
-        });
-        setIsLoading(false);
-      }
-    }, 1000);
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Login Failed",
+        description: error.message,
+      });
+      setIsLoading(false);
+    } else {
+      toast({
+        title: "Login Successful",
+        description: "Redirecting to dashboard...",
+      });
+      // router.push will be handled by middleware after refresh
+      router.refresh();
+    }
   };
 
   return (
@@ -71,7 +75,7 @@ export default function LoginPage() {
                 <Input
                   id="password"
                   type="password"
-                  placeholder="password"
+                  placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -84,13 +88,6 @@ export default function LoginPage() {
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Signing In..." : "Sign In"}
             </Button>
-             <Alert>
-              <Terminal className="h-4 w-4" />
-              <AlertTitle>Prototype Login</AlertTitle>
-              <AlertDescription className="text-xs">
-                Use `admin@ryha.in` and `password` to log in. This system is for demonstration only and is not secure for production use.
-              </AlertDescription>
-            </Alert>
           </CardFooter>
         </form>
       </Card>
