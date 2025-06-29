@@ -5,7 +5,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import type { Metadata } from "next";
-import VoiceReader from "./components/voice-reader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MessageSquare } from "lucide-react";
 
@@ -59,22 +58,6 @@ export default async function BlogPostPage({ params }: Props) {
     notFound();
   }
 
-  // Sanitize the content for the voice reader to remove Markdown/HTML artifacts.
-  const textForVoiceReader = (post.title + ". " + post.content)
-    .replace(/```[\s\S]*?```/g, '') // Remove code blocks
-    .replace(/`[^`]*`/g, '') // Remove inline code
-    .replace(/!\[.*?\]\(.*?\)/g, '') // Remove images
-    .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Keep link text, remove URL part
-    .replace(/<[^>]*>/g, '') // Strip any remaining HTML tags
-    .replace(/[#*_`~>|]/g, '') // Remove markdown characters
-    .replace(/(\r\n|\n|\r)/gm, ' ') // Replace newlines with spaces
-    .replace(/\s+/g, ' ') // Collapse whitespace
-    .trim();
-
-  // The TTS API has a character limit, so we truncate the text to be safe.
-  const truncatedText = textForVoiceReader.substring(0, 2500);
-
-
   return (
     <article className="container mx-auto px-4 py-8 md:py-12">
       <div className="max-w-4xl mx-auto">
@@ -109,7 +92,6 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
         
         <div className="prose dark:prose-invert">
-            <VoiceReader textToRead={truncatedText} />
             <div dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />') }}></div>
         </div>
 
