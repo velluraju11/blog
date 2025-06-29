@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ShieldCheck } from "lucide-react";
+import Link from "next/link";
 
 export default function LoginPage() {
   return (
@@ -34,7 +35,9 @@ export default function LoginPage() {
           </form>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button className="w-full">Sign In</Button>
+          <Button className="w-full" asChild>
+            <Link href="/admin/dashboard">Sign In</Link>
+          </Button>
           <p className="text-xs text-muted-foreground text-center">
             Access is restricted and monitored. Unauthorized access is prohibited.
           </p>
