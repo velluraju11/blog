@@ -17,36 +17,30 @@ export async function middleware(request: NextRequest) {
           return request.cookies.get(name)?.value
         },
         set(name: string, value: string, options: CookieOptions) {
-          // If the cookie is set, update the request's cookies for the current
-          // server-side pass, and update the response's cookies for the browser.
-          request.cookies.set({
-            name,
-            value,
-            ...options,
+          request.cookies.set({ name, value, ...options })
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
           })
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          })
+          response.cookies.set({ name, value, ...options })
         },
         remove(name: string, options: CookieOptions) {
-          // If the cookie is removed, update the request's cookies for the current
-          // server-side pass, and update the response's cookies for the browser.
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
+          request.cookies.set({ name, value: '', ...options })
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
           })
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
+          response.cookies.set({ name, value: '', ...options })
         },
       },
     }
   )
+
+  // This line is crucial for refreshing the session before checking the user.
+  // It ensures the session cookie is always up-to-date.
+  await supabase.auth.getSession();
 
   const {
     data: { user },
@@ -66,8 +60,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // Return the original response, which may have been modified with an updated
-  // session cookie.
   return response
 }
 
