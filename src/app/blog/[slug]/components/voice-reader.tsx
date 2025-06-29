@@ -33,14 +33,15 @@ export default function VoiceReader({ textToRead }: { textToRead: string }) {
         setAudioSrc(result.media);
         setState('playing');
       } else {
-        throw new Error('No audio data received.');
+        throw new Error('No audio data received from the service.');
       }
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
       console.error('Error generating audio:', error);
       toast({
         variant: 'destructive',
         title: 'Audio Generation Failed',
-        description: 'Could not generate audio for this post.',
+        description: `Could not generate audio for this post. Details: ${errorMessage}`,
       });
       setState('error');
     }
