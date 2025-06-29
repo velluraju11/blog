@@ -12,10 +12,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Loader2, Save } from 'lucide-react';
+import { Loader2, Save, Calendar as CalendarIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { Post, Category, Author } from '@/lib/types';
 import dynamic from 'next/dynamic';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
 
 const RichTextEditor = dynamic(() => import('@/components/rich-text-editor'), { ssr: false });
 
@@ -27,6 +31,16 @@ const formSchema = z.object({
   authorId: z.string().min(1, 'Please select an author.'),
   tags: z.string().optional(),
   isFeatured: z.boolean().default(false),
+  status: z.enum(['published', 'draft', 'scheduled']),
+  publishedAt: z.date().optional(),
+}).refine(data => {
+  if (data.status === 'scheduled') {
+    return !!data.publishedAt && data.publishedAt > new Date();
+  }
+  return true;
+}, {
+  message: "Scheduled date must be in the future.",
+  path: ["publishedAt"],
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -52,13 +66,20 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
       authorId: post.author.id,
       tags: post.tags.join(', '),
       isFeatured: post.isFeatured || false,
+      status: post.status,
+      publishedAt: post.publishedAt ? new Date(post.publishedAt) : undefined,
     },
   });
 
+  const status = form.watch('status');
+
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    // In a real app, you would send this data to a server action or API endpoint to persist the changes.
-    // Here we'll just simulate a delay and show a success message.
+
+    if (data.status === 'published' && (!data.publishedAt || data.publishedAt > new Date())) {
+        data.publishedAt = new Date();
+    }
+    
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     toast({
@@ -180,6 +201,70 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
                         </FormItem>
                     )}
                     />
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader><CardTitle>Publishing</CardTitle></CardHeader>
+              <CardContent className="space-y-6">
+                 <FormField
+                    control={form.control}
+                    name="status"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Status</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl><SelectTrigger><SelectValue placeholder="Select a status" /></SelectTrigger></FormControl>
+                          <SelectContent>
+                            <SelectItem value="published">Published</SelectItem>
+                            <SelectItem value="draft">Draft</SelectItem>
+                            <SelectItem value="scheduled">Scheduled</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  {status === 'scheduled' && (
+                     <FormField
+                        control={form.control}
+                        name="publishedAt"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-col">
+                            <FormLabel>Schedule Date</FormLabel>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                <FormControl>
+                                    <Button
+                                    variant={"outline"}
+                                    className={cn(
+                                        "w-full pl-3 text-left font-normal",
+                                        !field.value && "text-muted-foreground"
+                                    )}
+                                    >
+                                    {field.value ? (
+                                        format(field.value, "PPP")
+                                    ) : (
+                                        <span>Pick a date</span>
+                                    )}
+                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                    </Button>
+                                </FormControl>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0" align="start">
+                                <Calendar
+                                    mode="single"
+                                    selected={field.value}
+                                    onSelect={field.onChange}
+                                    disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                                    initialFocus
+                                />
+                                </PopoverContent>
+                            </Popover>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                  )}
               </CardContent>
             </Card>
           </div>
