@@ -5,7 +5,7 @@ import Header from "@/components/header";
 
 export default function ClientHeader() {
   const pathname = usePathname();
-  const hideHeader = pathname.startsWith("/ryhacontentmanagement");
+  const hideHeader = pathname.startsWith("/admin");
 
   if (hideHeader) {
     return null;

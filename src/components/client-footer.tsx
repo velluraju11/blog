@@ -5,7 +5,7 @@ import Footer from "@/components/footer";
 
 export default function ClientFooter() {
   const pathname = usePathname();
-  const hideFooter = pathname.startsWith("/ryhacontentmanagement");
+  const hideFooter = pathname.startsWith("/admin");
 
   if (hideFooter) {
     return null;
