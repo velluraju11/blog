@@ -60,7 +60,7 @@ This isn't just about building better software. It's about restoring digital sov
 
 This is just the beginning. Welcome to the revolution.
     `,
-    imageUrl: 'https://ik.imagekit.io/ps8bybjwy/Generated%20image%201%20(1).png?updatedAt=1750854478428',
+    imageUrl: 'https://ik.imagekit.io/ps8bybjwy/Screenshot%202025-06-11%20101654.png?updatedAt=1750819846177',
     imageHint: 'lone developer code',
     author: authors['velluraju-c'],
     category: categories['manifesto'],
@@ -84,8 +84,6 @@ A critical remote code execution (RCE) vulnerability, identified as CVE-2024-123
 The vulnerability exists in the file upload module, where improper validation of file types allows an attacker to upload a malicious script disguised as an image. Once uploaded, the script can be executed by accessing its direct URL.
 
 ### Example Payload
-
-A simple proof-of-concept involves uploading a PHP file with a \`.jpg\` extension:
 
 \`\`\`php
 <?php
