@@ -114,22 +114,31 @@ export default function SettingsForm() {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><KeyRound /> API Configuration</CardTitle>
+                            <CardTitle className="flex items-center gap-2"><KeyRound /> Environment Configuration</CardTitle>
                             <CardDescription>
-                                For AI features to work, your Google AI API key must be securely stored as an environment variable on the server.
+                                For the app to function, API keys must be securely stored as environment variables on the server.
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <Alert>
                                 <Terminal className="h-4 w-4" />
-                                <AlertTitle>Server-Side Configuration</AlertTitle>
+                                <AlertTitle>Required Keys</AlertTitle>
                                 <AlertDescription>
-                                    <ol className="list-decimal pl-4 space-y-1 mt-2 text-xs">
-                                        <li>Create a file named `.env` in the root of your project.</li>
-                                        <li>Add the following line to it:</li>
-                                        <li className="!mt-0"><code className="bg-muted text-muted-foreground font-mono p-1 rounded-sm text-[10px]">GOOGLE_API_KEY=your_api_key_here</code></li>
-                                        <li>Restart your application server to apply the changes.</li>
-                                    </ol>
+                                    <p className="mb-2 text-sm">Create a file named <code className="font-mono text-xs bg-muted p-1 rounded-sm">.env</code> in your project's root directory and add the following variables:</p>
+                                    <div className="space-y-4 mt-4">
+                                        <div>
+                                            <p className="font-semibold">Supabase (Authentication)</p>
+                                            <p className="text-xs text-muted-foreground mb-1">Find these in your Supabase project's API settings.</p>
+                                            <code className="block bg-muted text-muted-foreground font-mono p-1 rounded-sm text-[10px]">NEXT_PUBLIC_SUPABASE_URL=...</code>
+                                            <code className="block bg-muted text-muted-foreground font-mono p-1 rounded-sm text-[10px] mt-1">NEXT_PUBLIC_SUPABASE_ANON_KEY=...</code>
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold">Google AI (AI Features)</p>
+                                            <p className="text-xs text-muted-foreground mb-1">Get your key from Google AI Studio.</p>
+                                            <code className="block bg-muted text-muted-foreground font-mono p-1 rounded-sm text-[10px]">GOOGLE_API_KEY=...</code>
+                                        </div>
+                                    </div>
+                                    <p className="mt-4 text-xs">Remember to restart your server after updating the <code className="font-mono text-xs bg-muted p-1 rounded-sm">.env</code> file.</p>
                                 </AlertDescription>
                             </Alert>
                         </CardContent>
