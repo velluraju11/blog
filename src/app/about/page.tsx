@@ -184,7 +184,7 @@ export default function AboutPage() {
         <section className="bg-card/50 rounded-lg p-8 md:p-12">
             <div className="max-w-4xl mx-auto text-center">
                 <h2 className="text-3xl md:text-4xl font-headline font-bold mb-4">About the Founder</h2>
-                <Image src="https://placehold.co/150x150.png" data-ai-hint="founder portrait" alt="Velluraju C" width={150} height={150} className="rounded-full mx-auto my-6 shadow-lg" />
+                <Image src="https://ik.imagekit.io/ps8bybjwy/Screenshot%202025-06-11%20101654.png?updatedAt=1750819846177" data-ai-hint="founder portrait" alt="Velluraju C" width={150} height={150} className="rounded-full mx-auto my-6 shadow-lg object-cover" />
                 <h3 className="text-2xl font-headline font-semibold">Velluraju C</h3>
                 <p className="text-primary mb-6">Solo Architect of the Ryha Revolution</p>
                 <p className="text-muted-foreground mb-6">
