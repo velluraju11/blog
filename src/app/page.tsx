@@ -10,7 +10,7 @@ export default async function Home() {
     <div className="container mx-auto px-4 py-8 md:py-12">
       <section className="text-center py-16 md:py-24 animate-fade-in-up">
         <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter mb-4">
-          The Digital Revolution, Rebuilt.
+          The Digital Revolution.
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
           Ryha builds AI-native ecosystems where machines work for you — intelligently, securely, and forever. This is not a startup. This is a rebellion.
