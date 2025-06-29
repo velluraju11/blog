@@ -1,15 +1,2 @@
-import SettingsForm from './settings-form';
-
-export default function SettingsPage() {
-  return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold font-headline">Settings</h1>
-        <p className="text-muted-foreground">
-          Manage your account and application settings.
-        </p>
-      </div>
-      <SettingsForm />
-    </div>
-  );
-}
+// This directory and its contents have been removed to clean up the project structure.
+// All admin functionality is now consolidated under src/app/(cms)/admin/
