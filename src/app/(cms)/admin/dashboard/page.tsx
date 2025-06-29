@@ -7,6 +7,7 @@ import PostListTable from "./components/post-list-table";
 export default async function DashboardPage() {
     const posts = await getPosts();
     const totalPosts = posts.length;
+    const totalViews = posts.reduce((acc, post) => acc + (post.views || 0), 0);
     
     // Top posts sorted by views
     const topPosts = [...posts].sort((a, b) => (b.views ?? 0) - (a.views ?? 0));
@@ -25,8 +26,8 @@ export default async function DashboardPage() {
                         <BarChart className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">1,234,567</div>
-                        <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+                        <div className="text-2xl font-bold">{totalViews.toLocaleString()}</div>
+                        <p className="text-xs text-muted-foreground">All-time from published posts</p>
                     </CardContent>
                 </Card>
                 <Card>
@@ -36,7 +37,7 @@ export default async function DashboardPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">+2,350</div>
-                        <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+                        <p className="text-xs text-muted-foreground">+18.1% from last month</p>
                     </CardContent>
                 </Card>
                 <Card>

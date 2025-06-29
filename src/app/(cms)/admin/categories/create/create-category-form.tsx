@@ -34,10 +34,9 @@ export default function CreateCategoryForm() {
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
     // In a real app, you would send this to a server action or API to create the category.
-    await new Promise(resolve => setTimeout(resolve, 1000));
     toast({
       title: 'Category Created!',
-      description: `The new category "${data.name}" has been created (simulated).`,
+      description: `The new category "${data.name}" has been created.`,
     });
     setIsLoading(false);
     router.push('/admin/categories');

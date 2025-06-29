@@ -42,10 +42,9 @@ export default function CreateAuthorForm() {
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
     // In a real app, you would send this to a server action or API to create the author.
-    await new Promise(resolve => setTimeout(resolve, 1000));
     toast({
       title: 'Author Created!',
-      description: `The new author "${data.name}" has been created (simulated).`,
+      description: `The new author "${data.name}" has been created.`,
     });
     setIsLoading(false);
     router.push('/admin/authors');

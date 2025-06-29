@@ -14,8 +14,8 @@ import { createClient } from "@/lib/supabase/client";
 export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [email, setEmail] = useState("admin@ryha.in");
-  const [password, setPassword] = useState("password");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -59,9 +59,9 @@ export default function LoginPage() {
           <CardContent>
             <Alert>
                 <Terminal className="h-4 w-4" />
-                <AlertTitle>Demo Credentials</AlertTitle>
+                <AlertTitle>Admin Credentials</AlertTitle>
                 <AlertDescription>
-                    <p className="text-xs">Use the pre-filled credentials for this prototype. In a real application, these would be managed securely.</p>
+                    <p className="text-xs">Use the user credentials you created in your Supabase project.</p>
                 </AlertDescription>
             </Alert>
             <div className="grid w-full items-center gap-4 mt-4">
@@ -70,7 +70,7 @@ export default function LoginPage() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@ryha.in"
+                  placeholder="admin@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required

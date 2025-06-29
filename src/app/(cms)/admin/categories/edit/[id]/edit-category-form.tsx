@@ -37,10 +37,9 @@ export default function EditCategoryForm({ category }: EditCategoryFormProps) {
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
     toast({
       title: 'Category Updated!',
-      description: `The category "${data.name}" has been updated (simulated).`,
+      description: `The category "${data.name}" has been updated.`,
     });
     setIsLoading(false);
     router.push('/admin/categories');

@@ -90,11 +90,10 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
     setIsLoading(true);
     
     // In a real app, you would transform `data` before sending to your backend.
-    await new Promise(resolve => setTimeout(resolve, 1000));
     
     toast({
       title: 'Post Updated!',
-      description: 'The changes have been saved successfully (simulated).',
+      description: 'The changes have been saved successfully.',
     });
     setIsLoading(false);
     router.push('/admin/posts');

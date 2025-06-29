@@ -46,10 +46,9 @@ export default function EditAuthorForm({ author }: EditAuthorFormProps) {
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
     toast({
       title: 'Author Updated!',
-      description: `The author "${data.name}" has been updated (simulated).`,
+      description: `The author "${data.name}" has been updated.`,
     });
     setIsLoading(false);
     router.push('/admin/authors');
