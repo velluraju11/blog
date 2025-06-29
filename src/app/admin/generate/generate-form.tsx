@@ -16,19 +16,20 @@ import { Loader2, Wand2, Image as ImageIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import { Skeleton } from '@/components/ui/skeleton';
-import type { Category } from '@/lib/types';
+import type { Category, Author } from '@/lib/types';
 
 const formSchema = z.object({
   topic: z.string().min(5, 'Topic must be at least 5 characters.'),
   keywords: z.string().min(3, 'Please provide at least one keyword.'),
   categoryId: z.string({ required_error: "Please select a category." }).min(1, 'Please select a category.'),
+  authorId: z.string({ required_error: "Please select an author." }).min(1, 'Please select an author.'),
   tone: z.string().optional(),
   length: z.string().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
-export default function GenerateForm({ categories }: { categories: Category[] }) {
+export default function GenerateForm({ categories, authors }: { categories: Category[], authors: Author[] }) {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<GenerateBlogPostOutput | null>(null);
   const { toast } = useToast();
@@ -39,6 +40,7 @@ export default function GenerateForm({ categories }: { categories: Category[] })
       topic: '',
       keywords: '',
       categoryId: '',
+      authorId: '',
       tone: 'Informative',
       length: 'Medium',
     },
@@ -48,6 +50,7 @@ export default function GenerateForm({ categories }: { categories: Category[] })
     setIsLoading(true);
     setResult(null);
     try {
+      // The authorId is not yet used in the AI flow, but this structure supports it for future DB integration.
       const response = await generateBlogPost(data);
       setResult(response);
       toast({
@@ -101,28 +104,52 @@ export default function GenerateForm({ categories }: { categories: Category[] })
                   </FormItem>
                 )}
               />
-              <FormField
-                  control={form.control}
-                  name="categoryId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Category</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger><SelectValue placeholder="Select a category" /></SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {categories.map((category) => (
-                            <SelectItem key={category.id} value={category.id}>
-                              {category.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+               <div className="grid grid-cols-2 gap-4">
+                <FormField
+                    control={form.control}
+                    name="categoryId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Category</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger><SelectValue placeholder="Select a category" /></SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {categories.map((category) => (
+                              <SelectItem key={category.id} value={category.id}>
+                                {category.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="authorId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Author</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger><SelectValue placeholder="Select an author" /></SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {authors.map((author) => (
+                              <SelectItem key={author.id} value={author.id}>
+                                {author.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}

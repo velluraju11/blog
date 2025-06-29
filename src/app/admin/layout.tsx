@@ -14,7 +14,7 @@ import {
   SidebarTrigger,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { Bot, Cog, FolderKanban, Home, LayoutDashboard, LogOut, Newspaper, ShieldCheck } from "lucide-react";
+import { Bot, Cog, FolderKanban, Home, LayoutDashboard, LogOut, Newspaper, ShieldCheck, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const menuItems = [
@@ -23,6 +23,7 @@ const menuItems = [
     { href: "/admin/assistant", label: "AI Assistant", icon: Bot },
     { href: "/admin/posts", label: "Manage Posts", icon: Newspaper },
     { href: "/admin/categories", label: "Categories", icon: FolderKanban },
+    { href: "/admin/authors", label: "Authors", icon: Users },
     { href: "/admin/settings", label: "Settings", icon: Cog },
 ]
 

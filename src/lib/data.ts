@@ -205,3 +205,9 @@ export async function getCategories(): Promise<Category[]> {
   await new Promise(resolve => setTimeout(resolve, 100));
   return Object.values(categories);
 }
+
+export async function getAuthors(): Promise<Author[]> {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 100));
+  return Object.values(authors);
+}
