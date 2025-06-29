@@ -69,7 +69,7 @@ This is just the beginning. Welcome to the revolution.
     isFeatured: true,
     featuredOrder: 1,
     views: 12456,
-    ratings: { '😍': 150, '😊': 300, '🤔': 50, '😕': 10, '😠': 5 },
+    ratings: { '😠': 5, '😕': 10, '🤔': 50, '😊': 300, '😍': 150 },
   },
   {
     id: '1',
@@ -114,7 +114,7 @@ We will continue to monitor the situation and provide updates as they become ava
     isFeatured: true,
     featuredOrder: 3,
     views: 8765,
-    ratings: { '😍': 90, '😊': 250, '🤔': 120, '😕': 30, '😠': 15 },
+    ratings: { '😠': 15, '😕': 30, '🤔': 120, '😊': 250, '😍': 90 },
   },
   {
     id: '2',
@@ -152,7 +152,7 @@ The age of AI cyberwarfare is here. Preparing for this new reality is not just a
     isFeatured: true,
     featuredOrder: 2,
     views: 10987,
-    ratings: { '😍': 180, '😊': 400, '🤔': 80, '😕': 20, '😠': 8 },
+    ratings: { '😠': 8, '😕': 20, '🤔': 80, '😊': 400, '😍': 180 },
   },
   {
     id: '3',
@@ -184,7 +184,7 @@ The data shows a clear and worrying trend: a lack of basic security hygiene is t
     publishedAt: '2024-07-15T09:00:00Z',
     focusKeyword: 'Pentesting Report',
     views: 7654,
-    ratings: { '😍': 70, '😊': 180, '🤔': 95, '😕': 40, '😠': 12 },
+    ratings: { '😠': 12, '😕': 40, '🤔': 95, '😊': 180, '😍': 70 },
   },
 ];
 

@@ -5,11 +5,11 @@ import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const emojis = [
-    { emoji: '😍', label: 'Loved it!' },
-    { emoji: '😊', label: 'Good' },
-    { emoji: '🤔', label: 'Interesting' },
-    { emoji: '😕', label: 'Confusing' },
     { emoji: '😠', label: 'Didn\'t like it' },
+    { emoji: '😕', label: 'Confusing' },
+    { emoji: '🤔', label: 'Interesting' },
+    { emoji: '😊', label: 'Good' },
+    { emoji: '😍', label: 'Loved it!' },
 ];
 
 

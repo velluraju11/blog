@@ -16,10 +16,14 @@ export default async function PostStatsPage({ params }: Props) {
     notFound();
   }
 
-  const ratingsData = post.ratings ? Object.entries(post.ratings).map(([emoji, count]) => ({
-    name: emoji,
-    count: count,
-  })) : [];
+  const emojiOrder = ['😠', '😕', '🤔', '😊', '😍'];
+  const ratingsData = post.ratings ? Object.entries(post.ratings)
+    .map(([emoji, count]) => ({
+      name: emoji,
+      count: count,
+    }))
+    .sort((a, b) => emojiOrder.indexOf(a.name) - emojiOrder.indexOf(b.name))
+    : [];
 
   const totalRatings = ratingsData.reduce((acc, curr) => acc + curr.count, 0);
 
