@@ -87,7 +87,7 @@ export default function AdminLayout({
   }
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <Sidebar>
         <SidebarHeader>
           <div className="flex items-center gap-2 p-2">
@@ -99,7 +99,7 @@ export default function AdminLayout({
           <SidebarMenu>
             {menuItems.map(item => (
                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={pathname === item.href}>
+                    <SidebarMenuButton asChild isActive={pathname === item.href} tooltip={item.label}>
                         <Link href={item.href}>
                             <item.icon />
                             <span>{item.label}</span>
@@ -112,7 +112,7 @@ export default function AdminLayout({
         <SidebarFooter>
             <SidebarMenu>
                 <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton asChild tooltip="Back to Site">
                         <Link href="/">
                             <Home />
                             <span>Back to Site</span>
@@ -120,7 +120,7 @@ export default function AdminLayout({
                     </SidebarMenuButton>
                 </SidebarMenuItem>
                  <SidebarMenuItem>
-                    <SidebarMenuButton onClick={handleLogout}>
+                    <SidebarMenuButton onClick={handleLogout} tooltip="Logout">
                         <LogOut />
                         <span>Logout</span>
                     </SidebarMenuButton>
@@ -130,7 +130,7 @@ export default function AdminLayout({
       </Sidebar>
       <SidebarInset>
         <div className="p-4 sm:p-6 lg:p-8">
-            <div className="flex justify-end mb-4 md:hidden">
+            <div className="mb-4">
                 <SidebarTrigger />
             </div>
             {children}
