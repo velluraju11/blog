@@ -38,10 +38,8 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // This line is crucial for refreshing the session before checking the user.
-  // It ensures the session cookie is always up-to-date.
-  await supabase.auth.getSession();
-
+  // This single getUser() call is the official way to refresh the session
+  // and get the user's status in a single, reliable step.
   const {
     data: { user },
   } = await supabase.auth.getUser()
