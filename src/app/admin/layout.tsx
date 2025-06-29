@@ -15,13 +15,14 @@ import {
   SidebarTrigger,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { Bot, Cog, FolderKanban, Home, LayoutDashboard, LogOut, Newspaper, ShieldCheck, Users } from "lucide-react";
+import { Bot, Clock, Cog, FolderKanban, Home, LayoutDashboard, LogOut, Newspaper, ShieldCheck, Users } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const menuItems = [
     { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/admin/generate", label: "AI Generator", icon: Bot },
     { href: "/admin/posts", label: "Manage Posts", icon: Newspaper },
+    { href: "/admin/scheduler", label: "Scheduler", icon: Clock },
     { href: "/admin/categories", label: "Categories", icon: FolderKanban },
     { href: "/admin/authors", label: "Authors", icon: Users },
     { href: "/admin/settings", label: "Settings", icon: Cog },
@@ -98,7 +99,7 @@ export default function AdminLayout({
           <SidebarMenu>
             {menuItems.map(item => (
                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={pathname === item.href} tooltip={item.label}>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={item.label}>
                         <Link href={item.href}>
                             <item.icon />
                             <span>{item.label}</span>

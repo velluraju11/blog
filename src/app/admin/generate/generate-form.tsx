@@ -12,11 +12,16 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Loader2, Wand2, Image as ImageIcon } from 'lucide-react';
+import { Loader2, Wand2, Image as ImageIcon, Calendar as CalendarIcon, Clock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Category, Author } from '@/lib/types';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
 
 const formSchema = z.object({
   topic: z.string().min(5, 'Topic must be at least 5 characters.'),
@@ -26,6 +31,16 @@ const formSchema = z.object({
   authorId: z.string({ required_error: "Please select an author." }).min(1, 'Please select an author.'),
   tone: z.string().optional(),
   length: z.string().optional(),
+  publishAction: z.enum(['now', 'schedule']).default('now'),
+  scheduledAt: z.date().optional(),
+}).refine(data => {
+  if (data.publishAction === 'schedule') {
+    return !!data.scheduledAt && data.scheduledAt > new Date();
+  }
+  return true;
+}, {
+  message: "Scheduled date must be in the future.",
+  path: ["scheduledAt"],
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -45,8 +60,11 @@ export default function GenerateForm({ categories, authors }: { categories: Cate
       authorId: '',
       tone: 'Informative',
       length: 'Medium',
+      publishAction: 'now',
     },
   });
+
+  const publishAction = form.watch('publishAction');
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
@@ -54,10 +72,15 @@ export default function GenerateForm({ categories, authors }: { categories: Cate
     try {
       const response = await generateBlogPost(data);
       setResult(response);
+      
+      const isScheduling = data.publishAction === 'schedule';
       toast({
-        title: 'Success!',
-        description: 'Blog post and image generated successfully.',
+        title: isScheduling ? 'Post Scheduled!' : 'Post Generated!',
+        description: isScheduling 
+          ? `Post "${response.title}" scheduled for ${format(data.scheduledAt!, 'PPP')}.`
+          : 'Blog post and image generated successfully.',
       });
+
     } catch (error) {
       console.error('Error generating blog post:', error);
       toast({
@@ -68,6 +91,16 @@ export default function GenerateForm({ categories, authors }: { categories: Cate
     }
     setIsLoading(false);
   };
+  
+  const getButtonText = () => {
+    if (isLoading) return "Generating...";
+    return publishAction === 'schedule' ? 'Schedule Post' : 'Generate Post';
+  }
+  
+  const getButtonIcon = () => {
+      if (isLoading) return <Loader2 className="mr-2 h-4 w-4 animate-spin" />;
+      return publishAction === 'schedule' ? <Clock className="mr-2 h-4 w-4" /> : <Wand2 className="mr-2 h-4 w-4" />;
+  }
 
   return (
     <div className="grid lg:grid-cols-2 gap-8">
@@ -215,9 +248,79 @@ export default function GenerateForm({ categories, authors }: { categories: Cate
                   )}
                 />
               </div>
+
+               <FormField
+                control={form.control}
+                name="publishAction"
+                render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <FormLabel>Publish Options</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="flex flex-col space-y-1"
+                      >
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl><RadioGroupItem value="now" /></FormControl>
+                          <FormLabel className="font-normal">Publish Immediately</FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl><RadioGroupItem value="schedule" /></FormControl>
+                          <FormLabel className="font-normal">Schedule for Later</FormLabel>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {publishAction === 'schedule' && (
+                <FormField
+                  control={form.control}
+                  name="scheduledAt"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Schedule Date</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-[240px] pl-3 text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) => date < new Date() || date < new Date("1900-01-01")}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
               <Button type="submit" disabled={isLoading} className="w-full">
-                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
-                Generate Post
+                {getButtonIcon()}
+                {getButtonText()}
               </Button>
             </form>
           </Form>

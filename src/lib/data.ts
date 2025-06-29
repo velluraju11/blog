@@ -56,6 +56,7 @@ const posts: Post[] = [
     category: categories['manifesto'],
     tags: ['Manifesto', 'Privacy', 'Ryha OS', 'AI'],
     publishedAt: '2024-07-22T09:00:00Z',
+    status: 'published',
     isFeatured: true,
     featuredOrder: 1,
     views: 12456,
@@ -69,7 +70,7 @@ const posts: Post[] = [
     content: `
 <h1>Critical RCE Vulnerability in Nova-Framework (CVE-2024-12345)</h1>
 <p>A critical remote code execution (RCE) vulnerability, identified as CVE-2024-12345, has been discovered in the popular Nova-Framework. This vulnerability affects all versions prior to 3.1.5 and allows an unauthenticated attacker to execute arbitrary code on the server.</p>
-<h2>Technical Details</h2>
+<h3>Technical Details</h3>
 <p>The vulnerability exists in the file upload module, where improper validation of file types allows an attacker to upload a malicious script disguised as an image. Once uploaded, the script can be executed by accessing its direct URL.</p>
 <h3>Example Payload</h3>
 <pre><code class="language-php">&lt;?php
@@ -89,6 +90,7 @@ const posts: Post[] = [
     category: categories['cve'],
     tags: ['RCE', 'Vulnerability', 'Nova-Framework'],
     publishedAt: '2024-07-20T10:00:00Z',
+    status: 'published',
     focusKeyword: 'Nova-Framework Vulnerability',
     isFeatured: true,
     featuredOrder: 3,
@@ -125,6 +127,7 @@ const posts: Post[] = [
     category: categories['ai'],
     tags: ['AI', 'Cyberwarfare', 'Machine Learning'],
     publishedAt: '2024-07-18T14:30:00Z',
+    status: 'published',
     focusKeyword: 'AI Cyberwarfare',
     isFeatured: true,
     featuredOrder: 2,
@@ -156,30 +159,62 @@ const posts: Post[] = [
     category: categories['pentesting'],
     tags: ['Pentesting', 'Security Report', 'Vulnerabilities'],
     publishedAt: '2024-07-15T09:00:00Z',
+    status: 'published',
     focusKeyword: 'Pentesting Report',
     views: 7654,
     ratings: { '😠': 12, '😕': 40, '🤔': 95, '😊': 180, '😍': 70 },
+  },
+  {
+    id: '5',
+    slug: 'the-future-of-autonomous-code',
+    title: 'The Future of Autonomous Code Generation',
+    excerpt: 'Exploring how AI is moving beyond code assistance to fully autonomous development cycles, and what that means for the future of software.',
+    content: `<h1>The Future of Autonomous Code Generation</h1><p>The world of software development is on the brink of another paradigm shift. For years, AI has served as a capable assistant, a "copilot" that suggests code snippets and completes lines. But the true revolution lies in the next step: fully autonomous code generation. This isn't just about writing code faster; it's about reimagining the entire development lifecycle.</p><h2>From Copilot to Pilot</h2><p>Imagine giving an AI a high-level goal: "Build me a secure e-commerce platform with a recommendation engine." An autonomous agent would then be able to:</p><ul><li>Design the system architecture.</li><li>Write the front-end and back-end code.</li><li>Provision the necessary cloud infrastructure.</li><li>Write and execute comprehensive tests.</li><li>Deploy the application.</li></ul><p>This is the future Ryha is building towards. Our goal is to create AI that doesn't just assist, but leads the development process, allowing human engineers to focus on high-level strategy, creativity, and problem-solving.</p>`,
+    imageUrl: 'https://placehold.co/600x400.png',
+    imageHint: 'ai writing code',
+    author: authors['velluraju'],
+    category: categories['ai'],
+    tags: ['AI', 'Development', 'Future', 'Autonomous Systems'],
+    publishedAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days from now
+    status: 'scheduled',
+    views: 0,
+    ratings: { '😠': 0, '😕': 0, '🤔': 0, '😊': 0, '😍': 0 },
   },
 ];
 
 export async function getPosts(): Promise<Post[]> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 100));
-  return posts.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+  // Return only published posts that are not in the future
+  return posts
+    .filter(post => post.status === 'published' && new Date(post.publishedAt) <= new Date())
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 }
 
 export async function getFeaturedPosts(): Promise<Post[]> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 100));
   return posts
-    .filter(post => post.isFeatured)
+    .filter(post => post.isFeatured && post.status === 'published' && new Date(post.publishedAt) <= new Date())
     .sort((a, b) => (a.featuredOrder || 99) - (b.featuredOrder || 99));
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | undefined> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 100));
-  return posts.find(post => post.slug === slug);
+  const post = posts.find(post => post.slug === slug);
+  if (post && post.status === 'published' && new Date(post.publishedAt) <= new Date()) {
+    return post;
+  }
+  // Allow viewing scheduled posts in admin preview? For now, no.
+  return undefined;
+}
+
+export async function getScheduledPosts(): Promise<Post[]> {
+  await new Promise(resolve => setTimeout(resolve, 100));
+  return posts
+    .filter(post => post.status === 'scheduled')
+    .sort((a, b) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime());
 }
 
 export async function getCategories(): Promise<Category[]> {
