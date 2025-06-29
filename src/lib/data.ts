@@ -1,9 +1,9 @@
 import type { Post, Author, Category } from '@/lib/types';
 
 const authors: Record<string, Author> = {
-  'velluraju-c': {
-    id: 'velluraju-c',
-    name: 'Velluraju C',
+  'velluraju': {
+    id: 'velluraju',
+    name: 'Velluraju',
     avatarUrl: 'https://ik.imagekit.io/ps8bybjwy/Screenshot%202025-06-11%20101654.png?updatedAt=1750819846177',
     bio: 'Solo architect of the Ryha revolution. Student, hacker, and builder of the future.',
   },
@@ -62,7 +62,7 @@ This is just the beginning. Welcome to the revolution.
     `,
     imageUrl: 'https://ik.imagekit.io/ps8bybjwy/Screenshot%202025-06-11%20101654.png?updatedAt=1750819846177',
     imageHint: 'lone developer code',
-    author: authors['velluraju-c'],
+    author: authors['velluraju'],
     category: categories['manifesto'],
     tags: ['Manifesto', 'Privacy', 'Ryha OS', 'AI'],
     publishedAt: '2024-07-22T09:00:00Z',
@@ -98,7 +98,7 @@ The Ryha Security team urges all users of Nova-Framework to **update to version 
 
 For those unable to update immediately, a temporary workaround is to disable the file upload module in your application's configuration.
 
-> "Security is the bedrock of digital trust. Vulnerabilities like this are a stark reminder of why our autonomous, AI-driven security approach is critical for the future. We don't just patch problems; we build systems where they can't exist." – Velluraju C, Founder
+> "Security is the bedrock of digital trust. Vulnerabilities like this are a stark reminder of why our autonomous, AI-driven security approach is critical for the future. We don't just patch problems; we build systems where they can't exist." – Velluraju, Founder
 
 We will continue to monitor the situation and provide updates as they become available. Stay vigilant.
     `,
@@ -140,7 +140,7 @@ The age of AI cyberwarfare is here. Preparing for this new reality is not just a
     `,
     imageUrl: 'https://placehold.co/600x400.png',
     imageHint: 'abstract AI',
-    author: authors['velluraju-c'],
+    author: authors['velluraju'],
     category: categories['ai'],
     tags: ['AI', 'Cyberwarfare', 'Machine Learning'],
     publishedAt: '2024-07-18T14:30:00Z',

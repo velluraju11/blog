@@ -50,7 +50,7 @@ export default function AboutPage() {
           </p>
           <blockquote className="mt-8 text-lg italic text-foreground/80 max-w-3xl mx-auto">
             “We don’t build tools. We build digital worlds where machines work for you — intelligently, securely, and forever.”
-            <cite className="block not-italic mt-2 text-base text-muted-foreground">– Velluraju C, Founder of Ryha</cite>
+            <cite className="block not-italic mt-2 text-base text-muted-foreground">– Velluraju, Founder of Ryha</cite>
           </blockquote>
         </section>
 
@@ -184,15 +184,15 @@ export default function AboutPage() {
         <section className="bg-card/50 rounded-lg p-8 md:p-12">
             <div className="max-w-4xl mx-auto text-center">
                 <h2 className="text-3xl md:text-4xl font-headline font-bold mb-4">About the Founder</h2>
-                <Image src="https://ik.imagekit.io/ps8bybjwy/Screenshot%202025-06-11%20101654.png?updatedAt=1750819846177" data-ai-hint="founder portrait" alt="Velluraju C" width={150} height={150} className="rounded-full mx-auto my-6 shadow-lg object-cover" />
-                <h3 className="text-2xl font-headline font-semibold">Velluraju C</h3>
+                <Image src="https://ik.imagekit.io/ps8bybjwy/Screenshot%202025-06-11%20101654.png?updatedAt=1750819846177" data-ai-hint="founder portrait" alt="Velluraju" width={150} height={150} className="rounded-full mx-auto my-6 shadow-lg object-cover" />
+                <h3 className="text-2xl font-headline font-semibold">Velluraju</h3>
                 <p className="text-primary mb-6">Solo Architect of the Ryha Revolution</p>
                 <p className="text-muted-foreground mb-6">
-                    I’m Velluraju C — the solo architect, student, and world’s number one hacker aspirant behind Ryha. I didn’t have a team or funding. I had a vision and the hunger to build a revolution. While the grand architecture of Ryha is my own, I'm grateful for the friends who contributed to the smaller details along the way. Everything Ryha is today was designed and developed with a singular focus: line by line, system by system. No shortcuts. No compromises.
+                    I’m Velluraju — the solo architect, student, and world’s number one hacker aspirant behind Ryha. I didn’t have a team or funding. I had a vision and the hunger to build a revolution. While the grand architecture of Ryha is my own, I'm grateful for the friends who contributed to the smaller details along the way. Everything Ryha is today was designed and developed with a singular focus: line by line, system by system. No shortcuts. No compromises.
                 </p>
                 <blockquote className="text-lg italic text-foreground/80">
                 “Ryha isn’t just a startup. It’s my rebellion—against surveillance, against complexity, against control. It’s the future I want to live in, where machines serve, not spy.”
-                <cite className="block not-italic mt-2 text-base text-muted-foreground">– Velluraju C</cite>
+                <cite className="block not-italic mt-2 text-base text-muted-foreground">– Velluraju</cite>
                 </blockquote>
             </div>
         </section>
