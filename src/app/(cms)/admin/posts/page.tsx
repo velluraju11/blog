@@ -8,8 +8,14 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { PlusCircle } from "lucide-react";
+import { Bot, PlusCircle } from "lucide-react";
 import PostsTable from "./posts-table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default async function ManagePostsPage() {
   const posts = await getAdminPosts();
@@ -24,12 +30,26 @@ export default async function ManagePostsPage() {
             Search, filter, and manage your posts.
           </p>
         </div>
-        <Button asChild className="flex-shrink-0">
-          <Link href="/admin/generate">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Create New Post
-          </Link>
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button className="flex-shrink-0">
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Create New Post
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem asChild>
+              <Link href="/admin/posts/create" className="cursor-pointer flex items-center w-full">
+                <PlusCircle className="mr-2 h-4 w-4" /> Manually
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/admin/generate" className="cursor-pointer flex items-center w-full">
+                <Bot className="mr-2 h-4 w-4" /> With AI Generator
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <Card>

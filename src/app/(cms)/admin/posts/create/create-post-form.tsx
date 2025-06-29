@@ -12,9 +12,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Loader2, Save, Calendar as CalendarIcon, Clock } from 'lucide-react';
+import { Loader2, PlusCircle, Calendar as CalendarIcon, Clock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import type { Post, Category, Author } from '@/lib/types';
+import type { Category, Author } from '@/lib/types';
 import dynamic from 'next/dynamic';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
@@ -57,36 +57,29 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-interface EditPostFormProps {
-    post: Post;
+interface CreatePostFormProps {
     categories: Category[];
     authors: Author[];
 }
 
-export default function EditPostForm({ post, categories, authors }: EditPostFormProps) {
+export default function CreatePostForm({ categories, authors }: CreatePostFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  
-  const getInitialPublishAction = () => {
-    if (post.status === 'scheduled') return 'schedule';
-    if (post.status === 'draft') return 'draft';
-    return 'now';
-  }
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: post.title,
-      excerpt: post.excerpt,
-      content: post.content,
-      categoryId: post.category.id,
-      authorId: post.author.id,
-      tags: post.tags.join(', '),
-      isFeatured: post.isFeatured || false,
-      publishAction: getInitialPublishAction(),
-      scheduledDate: post.status === 'scheduled' && post.publishedAt ? new Date(post.publishedAt) : undefined,
-      scheduledTime: post.status === 'scheduled' && post.publishedAt ? format(new Date(post.publishedAt), 'HH:mm') : undefined,
+      title: '',
+      excerpt: '',
+      content: '',
+      categoryId: '',
+      authorId: '',
+      tags: '',
+      isFeatured: false,
+      publishAction: 'now',
+      scheduledDate: undefined,
+      scheduledTime: undefined,
     },
   });
 
@@ -95,11 +88,9 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
     
-    // In a real app, you would transform `data` before sending to your backend.
-    
     toast({
-      title: 'Post Updated!',
-      description: 'The changes have been saved successfully.',
+      title: 'Post Created!',
+      description: `The post "${data.title}" has been created.`,
     });
     setIsLoading(false);
     router.push('/admin/posts');
@@ -114,7 +105,7 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
             <Card>
               <CardHeader>
                 <CardTitle>Post Content</CardTitle>
-                <CardDescription>Edit the main content of your blog post.</CardDescription>
+                <CardDescription>Fill in the main content of your blog post.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <FormField
@@ -226,7 +217,7 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
                     name="publishAction"
                     render={({ field }) => (
                         <FormItem className="space-y-3">
-                        <FormLabel>Status</FormLabel>
+                        <FormLabel>Publish Options</FormLabel>
                         <FormControl>
                             <RadioGroup
                             onValueChange={field.onChange}
@@ -235,15 +226,15 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
                             >
                             <FormItem className="flex items-center space-x-3 space-y-0">
                                 <FormControl><RadioGroupItem value="draft" /></FormControl>
-                                <FormLabel className="font-normal">Draft</FormLabel>
+                                <FormLabel className="font-normal">Save as Draft</FormLabel>
                             </FormItem>
                             <FormItem className="flex items-center space-x-3 space-y-0">
                                 <FormControl><RadioGroupItem value="now" /></FormControl>
-                                <FormLabel className="font-normal">Published</FormLabel>
+                                <FormLabel className="font-normal">Publish Immediately</FormLabel>
                             </FormItem>
                             <FormItem className="flex items-center space-x-3 space-y-0">
                                 <FormControl><RadioGroupItem value="schedule" /></FormControl>
-                                <FormLabel className="font-normal">Scheduled</FormLabel>
+                                <FormLabel className="font-normal">Schedule for Later</FormLabel>
                             </FormItem>
                             </RadioGroup>
                         </FormControl>
@@ -309,8 +300,8 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
           </div>
         </div>
         <Button type="submit" disabled={isLoading} size="lg">
-          {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-          Save Changes
+          {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <PlusCircle className="mr-2 h-4 w-4" />}
+          Create Post
         </Button>
       </form>
     </Form>
