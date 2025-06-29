@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     title: 'Ryha - The Future, Engineered for Everyone',
     description: 'Ryha is a visionary force reshaping the digital era through cutting-edge AI, autonomous systems, and hyper-secure architecture.',
     type: 'website',
-    url: 'https://ryha.com', // Replace with your actual domain
+    url: 'https://ryha.in', // Replace with your actual domain
     images: [
       {
         url: 'https://placehold.co/1200x630.png', // Replace with your actual OG image
