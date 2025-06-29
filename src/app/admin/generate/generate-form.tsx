@@ -12,8 +12,10 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Loader2, Wand2 } from 'lucide-react';
+import { Loader2, Wand2, Image as ImageIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import Image from 'next/image';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const formSchema = z.object({
   topic: z.string().min(5, 'Topic must be at least 5 characters.'),
@@ -47,25 +49,25 @@ export default function GenerateForm() {
       setResult(response);
       toast({
         title: 'Success!',
-        description: 'Blog post generated successfully.',
+        description: 'Blog post and image generated successfully.',
       });
     } catch (error) {
       console.error('Error generating blog post:', error);
       toast({
         variant: 'destructive',
         title: 'Generation Failed',
-        description: 'An error occurred while generating the blog post.',
+        description: 'An error occurred while generating the blog post. Ensure your API key is configured.',
       });
     }
     setIsLoading(false);
   };
 
   return (
-    <div className="grid md:grid-cols-2 gap-8">
+    <div className="grid lg:grid-cols-2 gap-8">
       <Card>
         <CardHeader>
           <CardTitle className="font-headline">Content Parameters</CardTitle>
-          <CardDescription>Provide details for the AI to generate a post.</CardDescription>
+          <CardDescription>Provide details for the AI to generate a post and a hero image.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -112,6 +114,7 @@ export default function GenerateForm() {
                           <SelectItem value="Humorous">Humorous</SelectItem>
                           <SelectItem value="Technical">Technical</SelectItem>
                           <SelectItem value="Formal">Formal</SelectItem>
+                          <SelectItem value="Rebellious">Rebellious</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -148,36 +151,63 @@ export default function GenerateForm() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="font-headline">Generated Content</CardTitle>
-          <CardDescription>The AI-generated blog post will appear here.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {isLoading && (
-            <div className="flex items-center justify-center h-full">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
-          )}
-          {result && (
-            <div className="space-y-4">
-              <div>
-                <Label>Title</Label>
-                <Input readOnly value={result.title} />
+      <div className="space-y-8">
+        <Card>
+            <CardHeader>
+                <CardTitle className="font-headline">Generated Image</CardTitle>
+                <CardDescription>A hero image for your blog post.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                {isLoading ? (
+                    <Skeleton className="w-full aspect-video rounded-md" />
+                ) : result?.imageUrl ? (
+                    <Image
+                        src={result.imageUrl}
+                        alt="Generated blog post image"
+                        width={1280}
+                        height={720}
+                        className="rounded-md border aspect-video object-cover"
+                    />
+                ) : (
+                    <div className="flex flex-col items-center justify-center aspect-video border border-dashed rounded-md text-muted-foreground">
+                        <ImageIcon className="w-12 h-12 mb-2" />
+                        <p>Your generated image will appear here.</p>
+                    </div>
+                )}
+            </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-headline">Generated Content</CardTitle>
+            <CardDescription>The AI-generated blog post will appear here.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {isLoading && !result && (
+              <div className="space-y-4">
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-64 w-full" />
               </div>
-              <div>
-                <Label>Content</Label>
-                <Textarea readOnly value={result.content} className="h-80" />
+            )}
+            {result && (
+              <div className="space-y-4">
+                <div>
+                  <Label>Title</Label>
+                  <Input readOnly value={result.title} />
+                </div>
+                <div>
+                  <Label>Content</Label>
+                  <Textarea readOnly value={result.content} className="h-80" />
+                </div>
               </div>
-            </div>
-          )}
-           {!isLoading && !result && (
-             <div className="text-center text-muted-foreground py-12">
-                Your generated content will be displayed here.
-            </div>
-          )}
-        </CardContent>
-      </Card>
+            )}
+            {!isLoading && !result && (
+              <div className="text-center text-muted-foreground py-12">
+                  Your generated content will be displayed here.
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

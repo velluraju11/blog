@@ -1,16 +1,16 @@
-// This file is machine-generated - edit with care!
 'use server';
 
 /**
  * @fileOverview AI-powered blog post content generator using Gemini API.
  *
- * - generateBlogPost - A function that generates blog post content.
+ * - generateBlogPost - A function that generates blog post content and a hero image.
  * - GenerateBlogPostInput - The input type for the generateBlogPost function.
  * - GenerateBlogPostOutput - The return type for the generateBlogPost function.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { generateBlogImage } from './generate-blog-image';
 
 const GenerateBlogPostInputSchema = z.object({
   topic: z.string().describe('The topic of the blog post.'),
@@ -29,6 +29,7 @@ export type GenerateBlogPostInput = z.infer<typeof GenerateBlogPostInputSchema>;
 const GenerateBlogPostOutputSchema = z.object({
   title: z.string().describe('The title of the generated blog post.'),
   content: z.string().describe('The generated blog post content.'),
+  imageUrl: z.string().describe("The data URI of the generated hero image."),
 });
 export type GenerateBlogPostOutput = z.infer<typeof GenerateBlogPostOutputSchema>;
 
@@ -38,9 +39,18 @@ export async function generateBlogPost(input: GenerateBlogPostInput): Promise<Ge
 
 const generateBlogPostPrompt = ai.definePrompt({
   name: 'generateBlogPostPrompt',
-  input: {schema: GenerateBlogPostInputSchema},
-  output: {schema: GenerateBlogPostOutputSchema},
-  prompt: `You are an AI blog post writer. Generate a blog post based on the provided topic, keywords, tone, and length.
+  input: {schema: z.object({
+      topic: GenerateBlogPostInputSchema.shape.topic,
+      keywords: GenerateBlogPostInputSchema.shape.keywords,
+      tone: GenerateBlogPostInputSchema.shape.tone,
+      length: GenerateBlogPostInputSchema.shape.length,
+    })
+  },
+  output: {schema: z.object({
+    title: GenerateBlogPostOutputSchema.shape.title,
+    content: GenerateBlogPostOutputSchema.shape.content,
+  })},
+  prompt: `You are an AI blog post writer for Ryha, a cutting-edge AI and cybersecurity company. Generate a blog post based on the provided topic, keywords, tone, and length. The tone should align with Ryha's brand: powerful, visionary, and slightly rebellious.
 
 Topic: {{{topic}}}
 Keywords: {{{keywords}}}
@@ -48,7 +58,7 @@ Tone: {{{tone}}}
 Length: {{{length}}}
 
 Blog Post:
-`, // Ensure a newline character at the end
+`,
 });
 
 const generateBlogPostFlow = ai.defineFlow(
@@ -58,7 +68,20 @@ const generateBlogPostFlow = ai.defineFlow(
     outputSchema: GenerateBlogPostOutputSchema,
   },
   async input => {
-    const {output} = await generateBlogPostPrompt(input);
-    return output!;
+    // Run content and image generation in parallel
+    const [contentResult, imageResult] = await Promise.all([
+        generateBlogPostPrompt(input),
+        generateBlogImage({ topic: input.topic }),
+    ]);
+
+    const { output } = contentResult;
+    if (!output) {
+        throw new Error("Failed to generate blog post content.");
+    }
+    
+    return {
+        ...output,
+        imageUrl: imageResult.imageUrl,
+    };
   }
 );
