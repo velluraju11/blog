@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
-import { headers } from 'next/headers';
+import ClientHeader from '@/components/client-header';
+import ClientFooter from '@/components/client-footer';
 
 export const metadata: Metadata = {
   title: 'Ryha – The Future, Engineered for Everyone',
@@ -33,10 +32,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const heads = headers();
-  const pathname = heads.get('next-url') || '';
-  const hideHeaderFooter = pathname.startsWith('/admin') || pathname.startsWith('/login');
-
   return (
     <html lang="en" className="dark">
       <head>
@@ -45,9 +40,9 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased flex flex-col min-h-screen">
-        {!hideHeaderFooter && <Header />}
+        <ClientHeader />
         <main className="flex-grow">{children}</main>
-        {!hideHeaderFooter && <Footer />}
+        <ClientFooter />
         <Toaster />
       </body>
     </html>
