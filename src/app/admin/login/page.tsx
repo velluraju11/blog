@@ -23,6 +23,7 @@ export default function LoginPage() {
     // Simulate network delay
     setTimeout(() => {
       if (email === "admin@ryha.in" && password === "password") {
+        localStorage.setItem('ryha_auth', 'true');
         toast({
           title: "Login Successful",
           description: "Redirecting to dashboard...",

@@ -5,7 +5,7 @@ import Header from "@/components/header";
 
 export default function ClientHeader() {
   const pathname = usePathname();
-  const hideHeader = pathname.startsWith("/admin") || pathname.startsWith("/login");
+  const hideHeader = pathname.startsWith("/admin");
 
   if (hideHeader) {
     return null;
