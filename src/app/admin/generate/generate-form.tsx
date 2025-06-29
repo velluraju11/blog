@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Loader2, Wand2, Image as ImageIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
@@ -21,6 +21,7 @@ import type { Category, Author } from '@/lib/types';
 const formSchema = z.object({
   topic: z.string().min(5, 'Topic must be at least 5 characters.'),
   keywords: z.string().min(3, 'Please provide at least one keyword.'),
+  description: z.string().optional(),
   categoryId: z.string({ required_error: "Please select a category." }).min(1, 'Please select a category.'),
   authorId: z.string({ required_error: "Please select an author." }).min(1, 'Please select an author.'),
   tone: z.string().optional(),
@@ -39,6 +40,7 @@ export default function GenerateForm({ categories, authors }: { categories: Cate
     defaultValues: {
       topic: '',
       keywords: '',
+      description: '',
       categoryId: '',
       authorId: '',
       tone: 'Informative',
@@ -50,7 +52,6 @@ export default function GenerateForm({ categories, authors }: { categories: Cate
     setIsLoading(true);
     setResult(null);
     try {
-      // The authorId is not yet used in the AI flow, but this structure supports it for future DB integration.
       const response = await generateBlogPost(data);
       setResult(response);
       toast({
@@ -100,6 +101,26 @@ export default function GenerateForm({ categories, authors }: { categories: Cate
                     <FormControl>
                       <Input placeholder="quantum, security, encryption" {...field} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+               <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Instructions (Optional)</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="e.g., Start with a bold statement. Include a section on post-quantum cryptography. Use an image: [image - a futuristic padlock made of light]"
+                        className="h-24"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      To generate an image inside the post, use the format: [image - your image prompt]
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -247,7 +268,7 @@ export default function GenerateForm({ categories, authors }: { categories: Cate
                   <Input readOnly value={result.title} />
                 </div>
                 <div>
-                  <Label>Content</Label>
+                  <Label>Content (HTML)</Label>
                   <Textarea readOnly value={result.content} className="h-80" />
                 </div>
               </div>
