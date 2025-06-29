@@ -28,7 +28,7 @@ const menuItems = [
     { href: "/admin/settings", label: "Settings", icon: Cog },
 ]
 
-export default function AdminLayout({
+export default function AdminShell({
   children,
 }: {
   children: React.ReactNode;

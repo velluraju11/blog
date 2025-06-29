@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import './globals.css';
+import '../globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import ClientHeader from '@/components/client-header';
-import ClientFooter from '@/components/client-footer';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
 
 export const metadata: Metadata = {
   title: 'Ryha – The Future, Engineered for Everyone',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   keywords: ['AI', 'autonomous systems', 'cybersecurity', 'operating system', 'AI assistant', 'penetration testing'],
 };
 
-export default function RootLayout({
+export default function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -40,9 +40,9 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased flex flex-col min-h-screen">
-        <ClientHeader />
+        <Header />
         <main className="flex-grow">{children}</main>
-        <ClientFooter />
+        <Footer />
         <Toaster />
       </body>
     </html>
