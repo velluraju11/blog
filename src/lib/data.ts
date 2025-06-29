@@ -203,11 +203,9 @@ export async function getPostBySlug(slug: string): Promise<Post | undefined> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 100));
   const post = posts.find(post => post.slug === slug);
-  if (post && post.status === 'published' && new Date(post.publishedAt) <= new Date()) {
-    return post;
-  }
-  // Allow viewing scheduled posts in admin preview? For now, no.
-  return undefined;
+  // For admin purposes, we return the post regardless of status.
+  // Public-facing pages should add their own checks to prevent showing drafts or scheduled posts.
+  return post;
 }
 
 export async function getScheduledPosts(): Promise<Post[]> {

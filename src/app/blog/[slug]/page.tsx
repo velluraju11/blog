@@ -16,7 +16,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
 
-  if (!post) {
+  if (!post || post.status !== 'published' || new Date(post.publishedAt) > new Date()) {
     return {
       title: "Not Found",
       description: "The page you are looking for does not exist.",
@@ -55,7 +55,7 @@ export async function generateStaticParams() {
 export default async function BlogPostPage({ params }: Props) {
   const post = await getPostBySlug(params.slug);
 
-  if (!post) {
+  if (!post || post.status !== 'published' || new Date(post.publishedAt) > new Date()) {
     notFound();
   }
 
