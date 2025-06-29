@@ -1,6 +1,8 @@
+import { getCategories } from "@/lib/data";
 import GenerateForm from "./generate-form";
 
-export default function GeneratePage() {
+export default async function GeneratePage() {
+  const categories = await getCategories();
   return (
     <div className="space-y-8">
       <div>
@@ -9,7 +11,7 @@ export default function GeneratePage() {
           Use Gemini to automatically generate a blog post from a topic and keywords.
         </p>
       </div>
-      <GenerateForm />
+      <GenerateForm categories={categories} />
     </div>
   );
 }

@@ -4,7 +4,7 @@ const authors: Record<string, Author> = {
   'velluraju-c': {
     id: 'velluraju-c',
     name: 'Velluraju C',
-    avatarUrl: 'https://placehold.co/100x100.png',
+    avatarUrl: 'https://ik.imagekit.io/ps8bybjwy/Screenshot%202025-06-11%20101654.png?updatedAt=1750819846177',
     bio: 'Solo architect of the Ryha revolution. Student, hacker, and builder of the future.',
   },
   'ryha-team': {
@@ -198,4 +198,10 @@ export async function getPostBySlug(slug: string): Promise<Post | undefined> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 100));
   return posts.find(post => post.slug === slug);
+}
+
+export async function getCategories(): Promise<Category[]> {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 100));
+  return Object.values(categories);
 }
