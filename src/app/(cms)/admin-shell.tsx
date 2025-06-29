@@ -45,7 +45,7 @@ export default function AdminShell({
 
   useEffect(() => {
     if (isClient) {
-      const authStatus = localStorage.getItem('ryha_auth') === 'true';
+      const authStatus = localStorage.getItem('RYHA_CMS_AUTH_TOKEN') === 'true';
       setIsAuthenticated(authStatus);
       setIsLoading(false);
     }
@@ -63,7 +63,7 @@ export default function AdminShell({
   }, [isAuthenticated, isLoading, isClient, pathname, router]);
 
   const handleLogout = () => {
-    localStorage.removeItem('ryha_auth');
+    localStorage.removeItem('RYHA_CMS_AUTH_TOKEN');
     setIsAuthenticated(false);
     router.push('/admin/login');
   };

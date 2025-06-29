@@ -6,14 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ShieldCheck } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ShieldCheck, Terminal } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [email, setEmail] = useState("admin@ryha.in");
-  const [password, setPassword] = useState("password");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = (e: React.FormEvent) => {
@@ -23,7 +24,7 @@ export default function LoginPage() {
     // Simulate network delay
     setTimeout(() => {
       if (email === "admin@ryha.in" && password === "password") {
-        localStorage.setItem('ryha_auth', 'true');
+        localStorage.setItem('RYHA_CMS_AUTH_TOKEN', 'true');
         toast({
           title: "Login Successful",
           description: "Redirecting to dashboard...",
@@ -83,9 +84,13 @@ export default function LoginPage() {
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Signing In..." : "Sign In"}
             </Button>
-             <p className="text-xs text-muted-foreground text-center px-4">
-              Use email `admin@ryha.in` and password `password` to log in.
-            </p>
+             <Alert>
+              <Terminal className="h-4 w-4" />
+              <AlertTitle>Prototype Login</AlertTitle>
+              <AlertDescription className="text-xs">
+                Use `admin@ryha.in` and `password` to log in. This system is for demonstration only and is not secure for production use.
+              </AlertDescription>
+            </Alert>
           </CardFooter>
         </form>
       </Card>

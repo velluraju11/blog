@@ -8,11 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Loader2, Save, KeyRound } from 'lucide-react';
+import { Loader2, Save, KeyRound, Terminal } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const settingsFormSchema = z.object({
-  geminiApiKey: z.string().optional(),
   currentPassword: z.string().optional(),
   newPassword: z.string().min(8, { message: "Password must be at least 8 characters." }).optional().or(z.literal('')),
   confirmPassword: z.string().optional(),
@@ -44,7 +44,6 @@ export default function SettingsForm() {
     const form = useForm<SettingsFormData>({
         resolver: zodResolver(settingsFormSchema),
         defaultValues: {
-            geminiApiKey: '',
             currentPassword: '',
             newPassword: '',
             confirmPassword: '',
@@ -61,10 +60,7 @@ export default function SettingsForm() {
         if (data.newPassword && data.currentPassword) {
             updatedFields.push("password");
         }
-        if (data.geminiApiKey) {
-            updatedFields.push("API key");
-        }
-
+        
         let toastDescription = "No changes were made.";
         if (updatedFields.length > 0) {
             toastDescription = `Your ${updatedFields.join(' and ')} has been updated (simulated).`;
@@ -78,8 +74,6 @@ export default function SettingsForm() {
         setIsLoading(false);
         // Reset fields for sensitive data
         form.reset({ 
-            ...form.getValues(),
-            geminiApiKey: data.geminiApiKey, // Keep API key if user wants to see it
             currentPassword: '', 
             newPassword: '', 
             confirmPassword: '' 
@@ -142,23 +136,22 @@ export default function SettingsForm() {
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2"><KeyRound /> API Configuration</CardTitle>
                             <CardDescription>
-                                Provide your Google AI Gemini API key for content generation. Your key will be handled securely.
+                                For AI features to work, your Google AI API key must be securely stored as an environment variable on the server.
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <FormField
-                                control={form.control}
-                                name="geminiApiKey"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Gemini API Key</FormLabel>
-                                        <FormControl>
-                                            <Input type="password" placeholder="Enter your Google AI API key" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                            <Alert>
+                                <Terminal className="h-4 w-4" />
+                                <AlertTitle>Server-Side Configuration</AlertTitle>
+                                <AlertDescription>
+                                    <ol className="list-decimal pl-4 space-y-1 mt-2 text-xs">
+                                        <li>Create a file named `.env` in the root of your project.</li>
+                                        <li>Add the following line to it:</li>
+                                        <li className="!mt-0"><code className="bg-muted text-muted-foreground font-mono p-1 rounded-sm text-[10px]">GOOGLE_API_KEY=your_api_key_here</code></li>
+                                        <li>Restart your application server to apply the changes.</li>
+                                    </ol>
+                                </AlertDescription>
+                            </Alert>
                         </CardContent>
                     </Card>
                 </div>
