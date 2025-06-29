@@ -49,7 +49,7 @@ export default function AdminLayout({
       setIsAuthenticated(authStatus);
       setIsLoading(false);
     }
-  }, [isClient]);
+  }, [isClient, pathname]);
 
   useEffect(() => {
     if (!isLoading && isClient) {
