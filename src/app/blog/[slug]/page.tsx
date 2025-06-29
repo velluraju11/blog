@@ -70,6 +70,9 @@ export default async function BlogPostPage({ params }: Props) {
     .replace(/\s{2,}/g, ' ') // Collapse whitespace
     .trim();
 
+  // The TTS API has a character limit, so we truncate the text.
+  const truncatedText = textForVoiceReader.substring(0, 4000);
+
 
   return (
     <article className="container mx-auto px-4 py-8 md:py-12">
@@ -105,7 +108,7 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
         
         <div className="prose dark:prose-invert">
-            <VoiceReader textToRead={textForVoiceReader} />
+            <VoiceReader textToRead={truncatedText} />
             <div dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />') }}></div>
         </div>
 
