@@ -41,7 +41,7 @@ export default function VoiceReader({ textToRead }: { textToRead: string }) {
       toast({
         variant: 'destructive',
         title: 'Audio Generation Failed',
-        description: `Could not generate audio for this post. Details: ${errorMessage}`,
+        description: `Could not generate audio. Please ensure your Google AI API key is correctly configured in the .env file. Details: ${errorMessage}`,
       });
       setState('error');
     }

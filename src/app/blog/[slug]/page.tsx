@@ -60,22 +60,19 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   // Sanitize the content for the voice reader to remove Markdown/HTML artifacts.
-  const textForVoiceReader = post.content
+  const textForVoiceReader = (post.title + ". " + post.content)
     .replace(/```[\s\S]*?```/g, '') // Remove code blocks
     .replace(/`[^`]*`/g, '') // Remove inline code
     .replace(/!\[.*?\]\(.*?\)/g, '') // Remove images
     .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Keep link text, remove URL part
-    .replace(/^#+\s/gm, '') // Remove markdown headers
-    .replace(/^>\s/gm, '') // Remove markdown blockquotes
-    .replace(/(\*\*|__)(.*?)\1/g, '$2') // bold
-    .replace(/(\*|_)(.*?)\1/g, '$2') // italic
     .replace(/<[^>]*>/g, '') // Strip any remaining HTML tags
+    .replace(/[#*_`~>|]/g, '') // Remove markdown characters
     .replace(/(\r\n|\n|\r)/gm, ' ') // Replace newlines with spaces
     .replace(/\s+/g, ' ') // Collapse whitespace
     .trim();
 
   // The TTS API has a character limit, so we truncate the text to be safe.
-  const truncatedText = textForVoiceReader.substring(0, 2900);
+  const truncatedText = textForVoiceReader.substring(0, 2500);
 
 
   return (
