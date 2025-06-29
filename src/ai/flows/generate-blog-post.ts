@@ -50,12 +50,19 @@ const generateBlogPostPrompt = ai.definePrompt({
     title: GenerateBlogPostOutputSchema.shape.title,
     content: GenerateBlogPostOutputSchema.shape.content,
   })},
-  prompt: `You are an AI blog post writer for Ryha, a cutting-edge AI and cybersecurity company. Generate a blog post based on the provided topic, keywords, tone, and length. The tone should align with Ryha's brand: powerful, visionary, and slightly rebellious.
+  prompt: `You are an expert SEO specialist and blog post writer for Ryha, a cutting-edge AI and cybersecurity company.
+
+Your task is to generate a high-quality blog post that is both engaging and optimized for search engines.
+
+Instructions:
+1.  Create a compelling title and well-structured content based on the provided topic.
+2.  Naturally integrate the given keywords throughout the title, headings, and body text for SEO purposes. Avoid keyword stuffing.
+3.  Write in a tone that is {{{tone}}}, aligning with Ryha's brand: powerful, visionary, and slightly rebellious.
+4.  The post should be of {{{length}}} length.
+5.  The content MUST be formatted in clean HTML. Use headings (h2, h3), paragraphs (p), and lists (ul, ol, li) to structure the content for readability. Do not wrap the content in \`\`\`html.
 
 Topic: {{{topic}}}
 Keywords: {{{keywords}}}
-Tone: {{{tone}}}
-Length: {{{length}}}
 
 Blog Post:
 `,

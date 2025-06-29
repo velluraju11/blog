@@ -21,7 +21,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 const menuItems = [
     { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/admin/generate", label: "AI Generator", icon: Bot },
-    { href: "/admin/assistant", label: "AI Assistant", icon: Bot },
     { href: "/admin/posts", label: "Manage Posts", icon: Newspaper },
     { href: "/admin/categories", label: "Categories", icon: FolderKanban },
     { href: "/admin/authors", label: "Authors", icon: Users },
