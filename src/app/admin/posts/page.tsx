@@ -1,4 +1,4 @@
-import { getPosts } from "@/lib/data";
+import { getPosts, getCategories } from "@/lib/data";
 import {
   Card,
   CardContent,
@@ -13,6 +13,7 @@ import PostsTable from "./posts-table";
 
 export default async function ManagePostsPage() {
   const posts = await getPosts();
+  const categories = await getCategories();
 
   return (
     <div className="space-y-8">
@@ -20,7 +21,7 @@ export default async function ManagePostsPage() {
         <div>
           <h1 className="text-3xl font-bold font-headline">Manage Posts</h1>
           <p className="text-muted-foreground">
-            View, edit, and analyze your posts.
+            Search, filter, and manage your posts.
           </p>
         </div>
         <Button asChild className="flex-shrink-0">
@@ -39,7 +40,7 @@ export default async function ManagePostsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <PostsTable posts={posts} />
+          <PostsTable posts={posts} categories={categories} />
         </CardContent>
       </Card>
     </div>
