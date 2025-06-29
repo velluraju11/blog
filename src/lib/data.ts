@@ -60,7 +60,7 @@ This isn't just about building better software. It's about restoring digital sov
 
 This is just the beginning. Welcome to the revolution.
     `,
-    imageUrl: 'https://placehold.co/600x400.png',
+    imageUrl: 'https://ik.imagekit.io/ps8bybjwy/Generated%20image%201%20(1).png?updatedAt=1750854478428',
     imageHint: 'lone developer code',
     author: authors['velluraju-c'],
     category: categories['manifesto'],

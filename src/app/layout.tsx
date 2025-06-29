@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     url: 'https://ryha.in',
     images: [
       {
-        url: 'https://placehold.co/1200x630.png',
+        url: 'https://ik.imagekit.io/ps8bybjwy/Generated%20image%201%20(1).png?updatedAt=1750854478428',
         width: 1200,
         height: 630,
         alt: 'Ryha Logo and Tagline',

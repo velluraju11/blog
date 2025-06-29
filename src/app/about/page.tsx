@@ -92,7 +92,7 @@ export default function AboutPage() {
                 </ul>
             </div>
             <div>
-              <Image src="https://placehold.co/600x400.png" data-ai-hint="digital ecosystem" alt="Ryha Ecosystem" width={600} height={400} className="rounded-lg shadow-lg" />
+              <Image src="https://ik.imagekit.io/ps8bybjwy/Generated%20image%201%20(1).png?updatedAt=1750854478428" data-ai-hint="digital ecosystem" alt="Ryha Ecosystem" width={600} height={400} className="rounded-lg shadow-lg" />
             </div>
           </div>
         </section>
