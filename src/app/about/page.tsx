@@ -1,7 +1,8 @@
-import { ShieldCheck, BrainCircuit, Zap, Users, Code, Globe, MonitorSmartphone, Bot, ScanSearch, Key, Lightbulb, Lock, Rocket, Scale, Repeat, UserCog, HeartHandshake, Server, Cloud, Brain, TestTube, Briefcase, Hospital, Building, Plane, Cog as CogIcon, Users as UsersIcon, BookOpen, Banknote, Landmark } from "lucide-react";
+import { ShieldCheck, BrainCircuit, Zap, Users, Code, Globe, MonitorSmartphone, Bot, ScanSearch, Key, Lightbulb, Lock, Rocket, Scale, Repeat, UserCog, HeartHandshake, Server, Cloud, Brain, TestTube, Briefcase, Hospital, Building, Plane, Cog as CogIcon, Users as UsersIcon, BookOpen, Banknote, Landmark, ExternalLink } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from 'next/image';
 import React from "react";
+import { Button } from "@/components/ui/button";
 
 export default function AboutPage() {
   const whatRyhaBuilds = [
@@ -51,6 +52,18 @@ export default function AboutPage() {
             “We don’t build tools. We build digital worlds where machines work for you — intelligently, securely, and forever.”
             <cite className="block not-italic mt-2 text-base text-muted-foreground">– Velluraju C, Founder of Ryha</cite>
           </blockquote>
+        </section>
+
+        <section className="text-center bg-card/50 rounded-lg p-8 md:p-12 border border-border">
+            <h2 className="text-2xl md:text-3xl font-headline font-bold mb-4">Explore the Full Ecosystem</h2>
+            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+                For a deeper dive into our revolutionary technology and to see our products in action, visit our official company website.
+            </p>
+            <Button asChild size="lg">
+                <a href="https://ryha.tech" target="_blank" rel="noopener noreferrer">
+                    Visit ryha.tech <ExternalLink />
+                </a>
+            </Button>
         </section>
         
         <section className="max-w-4xl mx-auto text-center">
