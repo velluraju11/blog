@@ -5,22 +5,23 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 
 export const metadata: Metadata = {
-  title: 'Ryha',
+  title: 'Ryha – The Future, Engineered for Everyone',
   description: 'Ryha is a visionary force reshaping the digital era through cutting-edge AI, autonomous systems, and hyper-secure architecture.',
   openGraph: {
-    title: 'Ryha - The Future, Engineered for Everyone',
-    description: 'Ryha is a visionary force reshaping the digital era through cutting-edge AI, autonomous systems, and hyper-secure architecture.',
+    title: 'Ryha – The Future, Engineered for Everyone',
+    description: 'Ryha builds AI-native ecosystems where machines work for you — intelligently, securely, and forever.',
     type: 'website',
-    url: 'https://ryha.in', // Replace with your actual domain
+    url: 'https://ryha.in',
     images: [
       {
-        url: 'https://placehold.co/1200x630.png', // Replace with your actual OG image
+        url: 'https://placehold.co/1200x630.png',
         width: 1200,
         height: 630,
-        alt: 'Ryha',
+        alt: 'Ryha Logo and Tagline',
       },
     ],
   },
+  keywords: ['AI', 'autonomous systems', 'cybersecurity', 'operating system', 'AI assistant', 'penetration testing'],
 };
 
 export default function RootLayout({
