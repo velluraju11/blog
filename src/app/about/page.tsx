@@ -188,7 +188,7 @@ export default function AboutPage() {
                 <h3 className="text-2xl font-headline font-semibold">Velluraju C</h3>
                 <p className="text-primary mb-6">Solo Architect of the Ryha Revolution</p>
                 <p className="text-muted-foreground mb-6">
-                    I’m Velluraju C — the solo architect, student, and world’s number one hacker aspirant behind Ryha. I didn’t have a team or funding. I had a vision and the hunger to build a revolution. Everything Ryha is today was designed, developed, and optimized by me alone: line by line, system by system. No shortcuts. No compromises.
+                    I’m Velluraju C — the solo architect, student, and world’s number one hacker aspirant behind Ryha. I didn’t have a team or funding. I had a vision and the hunger to build a revolution. While the grand architecture of Ryha is my own, I'm grateful for the friends who contributed to the smaller details along the way. Everything Ryha is today was designed and developed with a singular focus: line by line, system by system. No shortcuts. No compromises.
                 </p>
                 <blockquote className="text-lg italic text-foreground/80">
                 “Ryha isn’t just a startup. It’s my rebellion—against surveillance, against complexity, against control. It’s the future I want to live in, where machines serve, not spy.”
