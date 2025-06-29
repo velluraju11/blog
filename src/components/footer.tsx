@@ -21,7 +21,6 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
               <li><Link href="/blog" className="hover:text-primary transition-colors">Blog</Link></li>
-              <li><Link href="/admin/login" className="hover:text-primary transition-colors">Admin Login</Link></li>
             </ul>
           </div>
           <div>
