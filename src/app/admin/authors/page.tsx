@@ -43,11 +43,10 @@ export default async function ManageAuthorsPage() {
           </p>
         </div>
         <Button asChild className="flex-shrink-0">
-          {/* In a real app, this would link to a create page */}
-          <button>
+          <Link href="/admin/authors/create">
             <PlusCircle className="mr-2 h-4 w-4" />
             Add Author
-          </button>
+          </Link>
         </Button>
       </div>
 

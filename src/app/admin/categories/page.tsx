@@ -42,11 +42,10 @@ export default async function ManageCategoriesPage() {
           </p>
         </div>
         <Button asChild className="flex-shrink-0">
-          {/* In a real app, this would link to a create page */}
-          <button>
+          <Link href="/admin/categories/create">
             <PlusCircle className="mr-2 h-4 w-4" />
             Add Category
-          </button>
+          </Link>
         </Button>
       </div>
 
