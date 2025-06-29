@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -22,6 +23,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   topic: z.string().min(5, 'Topic must be at least 5 characters.'),
@@ -46,6 +48,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export default function GenerateForm({ categories, authors }: { categories: Category[], authors: Author[] }) {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<GenerateBlogPostOutput | null>(null);
   const { toast } = useToast();
@@ -71,15 +74,23 @@ export default function GenerateForm({ categories, authors }: { categories: Cate
     setResult(null);
     try {
       const response = await generateBlogPost(data);
-      setResult(response);
       
       const isScheduling = data.publishAction === 'schedule';
       toast({
-        title: isScheduling ? 'Post Scheduled!' : 'Post Generated!',
+        title: isScheduling ? 'Post Scheduled!' : 'Post Published!',
         description: isScheduling 
-          ? `Post "${response.title}" scheduled for ${format(data.scheduledAt!, 'PPP')}.`
-          : 'Blog post and image generated successfully.',
+          ? `The post "${response.title}" is scheduled for ${format(data.scheduledAt!, 'PPP')}.`
+          : `The post "${response.title}" has been created.`,
       });
+
+      // In a real app with a database, the post would be saved here.
+      // For this prototype, we redirect to give the user a sense of completion.
+      if (isScheduling) {
+        router.push('/admin/scheduler');
+      } else {
+        router.push('/admin/posts');
+      }
+      router.refresh();
 
     } catch (error) {
       console.error('Error generating blog post:', error);
@@ -88,13 +99,14 @@ export default function GenerateForm({ categories, authors }: { categories: Cate
         title: 'Generation Failed',
         description: 'An error occurred while generating the blog post. Ensure your API key is configured.',
       });
+      setIsLoading(false); // Only stop loading on error, success case will redirect and unmount.
     }
-    setIsLoading(false);
   };
   
   const getButtonText = () => {
     if (isLoading) return "Generating...";
-    return publishAction === 'schedule' ? 'Schedule Post' : 'Generate Post';
+    if (publishAction === 'schedule') return "Generate & Schedule Post";
+    return 'Generate & Publish Post';
   }
   
   const getButtonIcon = () => {
