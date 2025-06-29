@@ -27,6 +27,8 @@ export default function LoginPage() {
       email,
       password,
     });
+    
+    setIsLoading(false);
 
     if (error) {
       toast({
@@ -34,14 +36,14 @@ export default function LoginPage() {
         title: "Login Failed",
         description: error.message,
       });
-      setIsLoading(false);
     } else {
       toast({
         title: "Login Successful",
         description: "Redirecting to dashboard...",
       });
-      // router.push will be handled by middleware after refresh
-      router.refresh();
+      // Redirect to the dashboard directly.
+      // The middleware will protect this route if auth fails.
+      router.push('/admin/dashboard');
     }
   };
 

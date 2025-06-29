@@ -8,16 +8,11 @@ export async function middleware(request: NextRequest) {
     },
   })
 
+  // Skip middleware if Supabase is not configured
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-  if (
-    !supabaseUrl ||
-    !supabaseAnonKey ||
-    !supabaseUrl.startsWith('http')
-  ) {
-    console.warn('Supabase environment variables are not configured correctly. Skipping auth middleware.')
-    return response
+  if (!supabaseUrl || !supabaseAnonKey || !supabaseUrl.startsWith('http')) {
+    return response;
   }
 
   const supabase = createServerClient(
@@ -29,6 +24,7 @@ export async function middleware(request: NextRequest) {
           return request.cookies.get(name)?.value
         },
         set(name: string, value: string, options: CookieOptions) {
+          // If the cookie is set, update the request and response cookies.
           request.cookies.set({
             name,
             value,
@@ -41,6 +37,7 @@ export async function middleware(request: NextRequest) {
           })
         },
         remove(name: string, options: CookieOptions) {
+          // If the cookie is removed, update the request and response cookies.
           request.cookies.set({
             name,
             value: '',
@@ -62,12 +59,14 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
+  // Protect all admin routes
   if (!user && pathname.startsWith('/admin') && pathname !== '/admin/login') {
     const url = request.nextUrl.clone()
     url.pathname = '/admin/login'
     return NextResponse.redirect(url)
   }
 
+  // If user is logged in, redirect them away from the login page
   if (user && pathname === '/admin/login') {
     const url = request.nextUrl.clone()
     url.pathname = '/admin/dashboard'
