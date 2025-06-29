@@ -14,8 +14,8 @@ import { createClient } from "@/lib/supabase/client";
 export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@ryha.in");
+  const [password, setPassword] = useState("password");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -57,7 +57,14 @@ export default function LoginPage() {
             <CardDescription>Enter your credentials to access the dashboard.</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid w-full items-center gap-4">
+            <Alert>
+                <Terminal className="h-4 w-4" />
+                <AlertTitle>Demo Credentials</AlertTitle>
+                <AlertDescription>
+                    <p className="text-xs">Use the pre-filled credentials for this prototype. In a real application, these would be managed securely.</p>
+                </AlertDescription>
+            </Alert>
+            <div className="grid w-full items-center gap-4 mt-4">
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="email">Email</Label>
                 <Input
