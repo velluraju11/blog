@@ -59,6 +59,18 @@ export default async function BlogPostPage({ params }: Props) {
     notFound();
   }
 
+  // Sanitize the content for the voice reader to remove Markdown/HTML artifacts.
+  const textForVoiceReader = post.content
+    .replace(/```[\s\S]*?```/g, ' ') // Remove code blocks
+    .replace(/#+ /g, '') // Remove markdown headers
+    .replace(/> /g, '') // Remove markdown blockquote markers
+    .replace(/(\*|_|`)/g, '') // Remove other markdown characters
+    .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Convert markdown links to just text
+    .replace(/\n/g, ' ') // Replace newlines with spaces
+    .replace(/\s{2,}/g, ' ') // Collapse whitespace
+    .trim();
+
+
   return (
     <article className="container mx-auto px-4 py-8 md:py-12">
       <div className="max-w-4xl mx-auto">
@@ -93,7 +105,7 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
         
         <div className="prose dark:prose-invert">
-            <VoiceReader textToRead={post.content} />
+            <VoiceReader textToRead={textForVoiceReader} />
             <div dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />') }}></div>
         </div>
 
