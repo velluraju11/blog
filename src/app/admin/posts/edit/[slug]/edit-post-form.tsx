@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Loader2, Save, Calendar as CalendarIcon } from 'lucide-react';
+import { Loader2, Save, Calendar as CalendarIcon, Clock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { Post, Category, Author } from '@/lib/types';
 import dynamic from 'next/dynamic';
@@ -20,6 +20,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const RichTextEditor = dynamic(() => import('@/components/rich-text-editor'), { ssr: false });
 
@@ -31,16 +32,27 @@ const formSchema = z.object({
   authorId: z.string().min(1, 'Please select an author.'),
   tags: z.string().optional(),
   isFeatured: z.boolean().default(false),
-  status: z.enum(['published', 'draft', 'scheduled']),
-  publishedAt: z.date().optional(),
+  publishAction: z.enum(['now', 'schedule']).default('now'),
+  scheduledDate: z.date().optional(),
+  scheduledTime: z.string().optional(),
 }).refine(data => {
-  if (data.status === 'scheduled') {
-    return !!data.publishedAt && data.publishedAt > new Date();
-  }
-  return true;
+    if (data.publishAction === 'schedule') {
+        if (!data.scheduledDate || !data.scheduledTime) {
+            return false;
+        }
+        const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+        if (!timeRegex.test(data.scheduledTime)) {
+            return false;
+        }
+        const [hours, minutes] = data.scheduledTime.split(':').map(Number);
+        const scheduledDateTime = new Date(data.scheduledDate);
+        scheduledDateTime.setHours(hours, minutes, 0, 0);
+        return scheduledDateTime > new Date();
+    }
+    return true;
 }, {
-  message: "Scheduled date must be in the future.",
-  path: ["publishedAt"],
+  message: "Scheduled date and time must be a valid time in the future.",
+  path: ["scheduledTime"],
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -66,20 +78,18 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
       authorId: post.author.id,
       tags: post.tags.join(', '),
       isFeatured: post.isFeatured || false,
-      status: post.status,
-      publishedAt: post.publishedAt ? new Date(post.publishedAt) : undefined,
+      publishAction: post.status === 'scheduled' ? 'schedule' : 'now',
+      scheduledDate: post.status === 'scheduled' && post.publishedAt ? new Date(post.publishedAt) : undefined,
+      scheduledTime: post.status === 'scheduled' && post.publishedAt ? format(new Date(post.publishedAt), 'HH:mm') : undefined,
     },
   });
 
-  const status = form.watch('status');
+  const publishAction = form.watch('publishAction');
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-
-    if (data.status === 'published' && (!data.publishedAt || data.publishedAt > new Date())) {
-        data.publishedAt = new Date();
-    }
     
+    // In a real app, you would transform `data` before sending to your backend.
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     toast({
@@ -204,30 +214,40 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
               </CardContent>
             </Card>
             <Card>
-              <CardHeader><CardTitle>Publishing</CardTitle></CardHeader>
-              <CardContent className="space-y-6">
-                 <FormField
+                <CardHeader><CardTitle>Publishing</CardTitle></CardHeader>
+                <CardContent className="space-y-6">
+                    <FormField
                     control={form.control}
-                    name="status"
+                    name="publishAction"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Status</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl><SelectTrigger><SelectValue placeholder="Select a status" /></SelectTrigger></FormControl>
-                          <SelectContent>
-                            <SelectItem value="published">Published</SelectItem>
-                            <SelectItem value="draft">Draft</SelectItem>
-                            <SelectItem value="scheduled">Scheduled</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <FormItem className="space-y-3">
+                        <FormLabel>Publish Options</FormLabel>
+                        <FormControl>
+                            <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex flex-col space-y-1"
+                            >
+                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                <FormControl><RadioGroupItem value="now" /></FormControl>
+                                <FormLabel className="font-normal">Publish Immediately</FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                <FormControl><RadioGroupItem value="schedule" /></FormControl>
+                                <FormLabel className="font-normal">Schedule for Later</FormLabel>
+                            </FormItem>
+                            </RadioGroup>
+                        </FormControl>
                         <FormMessage />
-                      </FormItem>
+                        </FormItem>
                     )}
-                  />
-                  {status === 'scheduled' && (
-                     <FormField
+                    />
+
+                    {publishAction === 'schedule' && (
+                    <div className="space-y-4">
+                        <FormField
                         control={form.control}
-                        name="publishedAt"
+                        name="scheduledDate"
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
                             <FormLabel>Schedule Date</FormLabel>
@@ -236,27 +256,20 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
                                 <FormControl>
                                     <Button
                                     variant={"outline"}
-                                    className={cn(
-                                        "w-full pl-3 text-left font-normal",
-                                        !field.value && "text-muted-foreground"
-                                    )}
+                                    className={cn("w-full justify-start text-left font-normal", !field.value && "text-muted-foreground")}
                                     >
-                                    {field.value ? (
-                                        format(field.value, "PPP")
-                                    ) : (
-                                        <span>Pick a date</span>
-                                    )}
-                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
                                     </Button>
                                 </FormControl>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0" align="start">
+                                <PopoverContent className="w-auto p-0">
                                 <Calendar
                                     mode="single"
                                     selected={field.value}
                                     onSelect={field.onChange}
-                                    disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
                                     initialFocus
+                                    disabled={(date) => date < new Date(new Date().setHours(0,0,0,0))}
                                 />
                                 </PopoverContent>
                             </Popover>
@@ -264,8 +277,25 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
                             </FormItem>
                         )}
                         />
-                  )}
-              </CardContent>
+                        <FormField
+                        control={form.control}
+                        name="scheduledTime"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Schedule Time</FormLabel>
+                            <FormControl>
+                                <div className="relative">
+                                    <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input type="time" {...field} className="pl-10" />
+                                </div>
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                    </div>
+                    )}
+                </CardContent>
             </Card>
           </div>
         </div>
