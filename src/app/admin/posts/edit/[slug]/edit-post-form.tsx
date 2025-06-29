@@ -213,90 +213,92 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
                     />
               </CardContent>
             </Card>
-            <Card>
-                <CardHeader><CardTitle>Publishing</CardTitle></CardHeader>
-                <CardContent className="space-y-6">
-                    <FormField
-                    control={form.control}
-                    name="publishAction"
-                    render={({ field }) => (
-                        <FormItem className="space-y-3">
-                        <FormLabel>Publish Options</FormLabel>
-                        <FormControl>
-                            <RadioGroup
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                            className="flex flex-col space-y-1"
-                            >
-                            <FormItem className="flex items-center space-x-3 space-y-0">
-                                <FormControl><RadioGroupItem value="now" /></FormControl>
-                                <FormLabel className="font-normal">Publish Immediately</FormLabel>
-                            </FormItem>
-                            <FormItem className="flex items-center space-x-3 space-y-0">
-                                <FormControl><RadioGroupItem value="schedule" /></FormControl>
-                                <FormLabel className="font-normal">Schedule for Later</FormLabel>
-                            </FormItem>
-                            </RadioGroup>
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
+            {post.status !== 'published' && (
+              <Card>
+                  <CardHeader><CardTitle>Publishing</CardTitle></CardHeader>
+                  <CardContent className="space-y-6">
+                      <FormField
+                      control={form.control}
+                      name="publishAction"
+                      render={({ field }) => (
+                          <FormItem className="space-y-3">
+                          <FormLabel>Publish Options</FormLabel>
+                          <FormControl>
+                              <RadioGroup
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                              className="flex flex-col space-y-1"
+                              >
+                              <FormItem className="flex items-center space-x-3 space-y-0">
+                                  <FormControl><RadioGroupItem value="now" /></FormControl>
+                                  <FormLabel className="font-normal">Publish Immediately</FormLabel>
+                              </FormItem>
+                              <FormItem className="flex items-center space-x-3 space-y-0">
+                                  <FormControl><RadioGroupItem value="schedule" /></FormControl>
+                                  <FormLabel className="font-normal">Schedule for Later</FormLabel>
+                              </FormItem>
+                              </RadioGroup>
+                          </FormControl>
+                          <FormMessage />
+                          </FormItem>
+                      )}
+                      />
 
-                    {publishAction === 'schedule' && (
-                    <div className="space-y-4">
-                        <FormField
-                        control={form.control}
-                        name="scheduledDate"
-                        render={({ field }) => (
-                            <FormItem className="flex flex-col">
-                            <FormLabel>Schedule Date</FormLabel>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                <FormControl>
-                                    <Button
-                                    variant={"outline"}
-                                    className={cn("w-full justify-start text-left font-normal", !field.value && "text-muted-foreground")}
-                                    >
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-                                    </Button>
-                                </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0">
-                                <Calendar
-                                    mode="single"
-                                    selected={field.value}
-                                    onSelect={field.onChange}
-                                    initialFocus
-                                    disabled={(date) => date < new Date(new Date().setHours(0,0,0,0))}
-                                />
-                                </PopoverContent>
-                            </Popover>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                        />
-                        <FormField
-                        control={form.control}
-                        name="scheduledTime"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Schedule Time</FormLabel>
-                            <FormControl>
-                                <div className="relative">
-                                    <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                    <Input type="time" {...field} className="pl-10" />
-                                </div>
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                        />
-                    </div>
-                    )}
-                </CardContent>
-            </Card>
+                      {publishAction === 'schedule' && (
+                      <div className="space-y-4">
+                          <FormField
+                          control={form.control}
+                          name="scheduledDate"
+                          render={({ field }) => (
+                              <FormItem className="flex flex-col">
+                              <FormLabel>Schedule Date</FormLabel>
+                              <Popover>
+                                  <PopoverTrigger asChild>
+                                  <FormControl>
+                                      <Button
+                                      variant={"outline"}
+                                      className={cn("w-full justify-start text-left font-normal", !field.value && "text-muted-foreground")}
+                                      >
+                                      <CalendarIcon className="mr-2 h-4 w-4" />
+                                      {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                                      </Button>
+                                  </FormControl>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-auto p-0">
+                                  <Calendar
+                                      mode="single"
+                                      selected={field.value}
+                                      onSelect={field.onChange}
+                                      initialFocus
+                                      disabled={(date) => date < new Date(new Date().setHours(0,0,0,0))}
+                                  />
+                                  </PopoverContent>
+                              </Popover>
+                              <FormMessage />
+                              </FormItem>
+                          )}
+                          />
+                          <FormField
+                          control={form.control}
+                          name="scheduledTime"
+                          render={({ field }) => (
+                              <FormItem>
+                              <FormLabel>Schedule Time</FormLabel>
+                              <FormControl>
+                                  <div className="relative">
+                                      <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                      <Input type="time" {...field} className="pl-10" />
+                                  </div>
+                              </FormControl>
+                              <FormMessage />
+                              </FormItem>
+                          )}
+                          />
+                      </div>
+                      )}
+                  </CardContent>
+              </Card>
+            )}
           </div>
         </div>
         <Button type="submit" disabled={isLoading} size="lg">

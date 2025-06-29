@@ -215,6 +215,13 @@ export async function getScheduledPosts(): Promise<Post[]> {
     .sort((a, b) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime());
 }
 
+export async function getAdminPosts(): Promise<Post[]> {
+  await new Promise(resolve => setTimeout(resolve, 100));
+  return posts
+    .filter(post => post.status !== 'scheduled')
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+}
+
 export async function getCategories(): Promise<Category[]> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 100));

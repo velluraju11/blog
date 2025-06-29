@@ -1,4 +1,4 @@
-import { getPosts, getCategories } from "@/lib/data";
+import { getAdminPosts, getCategories } from "@/lib/data";
 import {
   Card,
   CardContent,
@@ -12,7 +12,7 @@ import { PlusCircle } from "lucide-react";
 import PostsTable from "./posts-table";
 
 export default async function ManagePostsPage() {
-  const posts = await getPosts();
+  const posts = await getAdminPosts();
   const categories = await getCategories();
 
   return (
