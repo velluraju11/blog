@@ -5,20 +5,22 @@ import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const emojis = [
-    { emoji: '😠', label: 'Didn\'t like it' },
-    { emoji: '😕', label: 'Confusing' },
-    { emoji: '🤔', label: 'Interesting' },
-    { emoji: '😊', label: 'Good' },
-    { emoji: '😍', label: 'Loved it!' },
+    { emoji: '😠', label: 'Didn\'t like it', message: "Thanks for the feedback. We will work to improve it." },
+    { emoji: '😕', label: 'Confusing', message: "We appreciate you letting us know. We'll try to make this clearer." },
+    { emoji: '🤔', label: 'Interesting', message: "Glad you found it interesting! Thank you." },
+    { emoji: '😊', label: 'Good', message: "Great! We're happy you found it helpful." },
+    { emoji: '😍', label: 'Loved it!', message: "Awesome! We're thrilled you loved the post." },
 ];
 
 
 export default function EmojiFeedback() {
     const [submitted, setSubmitted] = useState(false);
+    const [feedbackMessage, setFeedbackMessage] = useState("");
     const { toast } = useToast();
 
-    const handleEmojiClick = (label: string) => {
+    const handleEmojiClick = (label: string, message: string) => {
         setSubmitted(true);
+        setFeedbackMessage(message);
         toast({
             title: "Feedback Submitted!",
             description: `You rated this post as: "${label}"`,
@@ -28,7 +30,7 @@ export default function EmojiFeedback() {
     if (submitted) {
         return (
             <div className="text-center p-4 rounded-lg bg-accent/50 text-accent-foreground font-medium my-12">
-                Thanks for your feedback!
+                {feedbackMessage}
             </div>
         );
     }
@@ -40,10 +42,10 @@ export default function EmojiFeedback() {
             </CardHeader>
             <CardContent>
                 <div className="flex justify-center items-center gap-4 md:gap-6">
-                    {emojis.map(({ emoji, label }) => (
+                    {emojis.map(({ emoji, label, message }) => (
                         <button
                             key={emoji}
-                            onClick={() => handleEmojiClick(label)}
+                            onClick={() => handleEmojiClick(label, message)}
                             className="group relative"
                             aria-label={label}
                         >
