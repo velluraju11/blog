@@ -14,13 +14,13 @@ export async function middleware(request: NextRequest) {
   if (
     !supabaseUrl ||
     !supabaseAnonKey ||
-    supabaseUrl.includes('YOUR_SUPABASE_URL')
+    !supabaseUrl.startsWith('http')
   ) {
-    // Supabase credentials are not configured.
-    // We will skip the auth logic and allow the request to proceed.
-    // The user will be redirected to the login page if they try to access a protected route.
+    // Supabase credentials are not configured or are invalid.
+    // We will skip the auth logic to prevent a crash and allow the app to run.
+    // This allows the user to at least see the app and the instructions on the settings page.
     console.warn(
-      'Supabase environment variables are not configured. Skipping auth middleware.'
+      'Supabase environment variables are not configured or are invalid. Skipping auth middleware.'
     )
     return response
   }
