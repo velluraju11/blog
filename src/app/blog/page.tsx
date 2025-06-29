@@ -1,13 +1,9 @@
 import { getCategories, getPosts } from "@/lib/data";
-import BlogPostCard from "@/components/blog-post-card";
-import { Badge } from "@/components/ui/badge";
-import type { Category } from "@/lib/types";
+import BlogList from "./components/blog-list";
 
 export default async function BlogPage() {
   const posts = await getPosts();
-  const allCategories = await getCategories();
-  const categories: (Category & { isAll?: boolean })[] = [{ id: 'all', name: 'All', isAll: true }, ...allCategories];
-
+  const categories = await getCategories();
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
@@ -19,21 +15,8 @@ export default async function BlogPage() {
                 Dispatches on AI, security, and the future of autonomous systems.
             </p>
         </section>
-
-        <section className="pb-12">
-            <div className="flex justify-center flex-wrap gap-2 mb-12">
-                {categories.map(category => (
-                    <Badge key={category.id} variant={category.isAll ? 'default' : 'secondary'} className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors px-4 py-2 text-sm">{category.name}</Badge>
-                ))}
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {posts.map((post, index) => (
-                    <div key={post.id} style={{ animationDelay: `${index * 100}ms`}} className="animate-fade-in-up">
-                    <BlogPostCard post={post} />
-                    </div>
-                ))}
-            </div>
-        </section>
+        
+        <BlogList posts={posts} categories={categories} />
     </div>
   );
 }
