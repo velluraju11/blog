@@ -73,27 +73,22 @@ export default function AboutPage() {
             </p>
         </section>
 
-        <section className="max-w-5xl mx-auto">
+        <section className="max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-headline font-bold text-center mb-12">What Ryha Builds</h2>
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="flex flex-col justify-center">
-                <p className="text-muted-foreground mb-6">
-                Ryha creates AI-native, autonomous digital ecosystems that think, work, and evolve — like a human. They:
-                </p>
-                <ul className="space-y-4">
-                {whatRyhaBuilds.map((item, index) => (
-                    <li key={index} className="flex items-start gap-4">
-                    <div className="p-2 bg-primary/10 rounded-full text-primary mt-1">
-                        {React.cloneElement(item.icon, { className: 'w-5 h-5' })}
-                    </div>
-                    <span className="flex-1 text-base">{item.text}</span>
-                    </li>
-                ))}
-                </ul>
-            </div>
-            <div>
-              <Image src="https://ik.imagekit.io/ps8bybjwy/Generated%20image%201%20(1).png?updatedAt=1750854478428" data-ai-hint="digital ecosystem" alt="Ryha Ecosystem" width={600} height={400} className="rounded-lg shadow-lg" />
-            </div>
+          <div className="max-w-3xl mx-auto">
+            <p className="text-muted-foreground mb-8 text-center">
+            Ryha creates AI-native, autonomous digital ecosystems that think, work, and evolve — like a human. They:
+            </p>
+            <ul className="space-y-4 md:grid md:grid-cols-2 md:gap-x-12 md:gap-y-6 md:space-y-0">
+            {whatRyhaBuilds.map((item, index) => (
+                <li key={index} className="flex items-start gap-4">
+                <div className="p-2 bg-primary/10 rounded-full text-primary mt-1">
+                    {React.cloneElement(item.icon, { className: 'w-5 h-5' })}
+                </div>
+                <span className="flex-1 text-base">{item.text}</span>
+                </li>
+            ))}
+            </ul>
           </div>
         </section>
 
