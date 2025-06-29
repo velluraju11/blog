@@ -15,7 +15,9 @@ import { Switch } from "@/components/ui/switch";
 import { Loader2, Save } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { Post, Category, Author } from '@/lib/types';
-import RichTextEditor from '@/components/rich-text-editor';
+import dynamic from 'next/dynamic';
+
+const RichTextEditor = dynamic(() => import('@/components/rich-text-editor'), { ssr: false });
 
 const formSchema = z.object({
   title: z.string().min(5, 'Title must be at least 5 characters.'),
