@@ -41,9 +41,9 @@ export default function LoginPage() {
         title: "Login Successful",
         description: "Redirecting to dashboard...",
       });
-      // Redirect to the dashboard directly.
-      // The middleware will protect this route if auth fails.
-      router.push('/admin/dashboard');
+      // Refresh the page to trigger middleware check.
+      // The middleware will handle redirecting to the dashboard.
+      router.refresh();
     }
   };
 
