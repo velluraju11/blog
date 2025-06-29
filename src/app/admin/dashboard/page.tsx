@@ -1,15 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { getPosts } from "@/lib/data";
-import { ArrowUpRight, BookOpen, Users, BarChart, Eye } from "lucide-react";
-import Link from "next/link";
+import { BookOpen, Users, BarChart } from "lucide-react";
 import { Overview } from "./components/overview";
+import PostListTable from "./components/post-list-table";
 
 export default async function DashboardPage() {
     const posts = await getPosts();
     const totalPosts = posts.length;
+    
+    // Top posts sorted by views
+    const topPosts = [...posts].sort((a, b) => (b.views ?? 0) - (a.views ?? 0));
     
     return (
         <div className="space-y-8">
@@ -51,49 +51,27 @@ export default async function DashboardPage() {
                 </Card>
             </div>
             
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
-                    <CardHeader>
-                        <CardTitle className="font-headline">Overview</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pl-2">
-                        <Overview />
-                    </CardContent>
-                </Card>
-                <Card className="col-span-4 lg:col-span-3">
-                    <CardHeader>
-                        <CardTitle className="font-headline">Recent Posts</CardTitle>
-                        <CardDescription>
-                            Your most recently published blog posts.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Title</TableHead>
-                                    <TableHead className="text-right">Views</TableHead>
-                                    <TableHead className="text-right">Actions</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {posts.slice(0, 5).map((post) => (
-                                    <TableRow key={post.id}>
-                                        <TableCell className="font-medium max-w-[200px] truncate">{post.title}</TableCell>
-                                        <TableCell className="text-right font-mono text-muted-foreground">
-                                            {post.views?.toLocaleString() ?? 'N/A'}
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            <Button variant="outline" size="sm" asChild>
-                                                <Link href={`/blog/${post.slug}`} target="_blank">View</Link>
-                                            </Button>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </CardContent>
-                </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle className="font-headline">Traffic Overview</CardTitle>
+                    <CardDescription>A summary of your page views over the last year.</CardDescription>
+                </CardHeader>
+                <CardContent className="pl-2">
+                    <Overview />
+                </CardContent>
+            </Card>
+
+            <div className="grid gap-4 md:grid-cols-2">
+                <PostListTable
+                    posts={topPosts}
+                    title="Top Performing Posts"
+                    description="Your most viewed posts of all time."
+                />
+                <PostListTable
+                    posts={posts} 
+                    title="Recent Posts"
+                    description="Your most recently published blog posts."
+                />
             </div>
         </div>
     );
