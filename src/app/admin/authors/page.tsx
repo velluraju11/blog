@@ -28,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 
 export default async function ManageAuthorsPage() {
   const authors = await getAuthors();
@@ -96,8 +97,10 @@ export default async function ManageAuthorsPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem className="cursor-pointer flex items-center">
-                          <Edit className="mr-2 h-4 w-4" /> Edit
+                        <DropdownMenuItem asChild>
+                           <Link href={`/admin/authors/edit/${author.id}`} className="cursor-pointer flex items-center">
+                            <Edit className="mr-2 h-4 w-4" /> Edit
+                          </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive focus:text-destructive cursor-pointer flex items-center">
                           <Trash2 className="mr-2 h-4 w-4" /> Delete

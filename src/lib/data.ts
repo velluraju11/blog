@@ -214,8 +214,20 @@ export async function getCategories(): Promise<Category[]> {
   return Object.values(categories);
 }
 
+export async function getCategoryById(id: string): Promise<Category | undefined> {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 100));
+  return Object.values(categories).find(cat => cat.id === id);
+}
+
 export async function getAuthors(): Promise<Author[]> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 100));
   return Object.values(authors);
+}
+
+export async function getAuthorById(id: string): Promise<Author | undefined> {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 100));
+  return Object.values(authors).find(auth => auth.id === id);
 }

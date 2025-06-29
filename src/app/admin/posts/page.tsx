@@ -132,8 +132,10 @@ export default async function ManagePostsPage() {
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="cursor-pointer flex items-center">
-                          <Edit className="mr-2 h-4 w-4" /> Edit
+                        <DropdownMenuItem asChild>
+                          <Link href={`/admin/posts/edit/${post.slug}`} className="cursor-pointer flex items-center">
+                            <Edit className="mr-2 h-4 w-4" /> Edit
+                          </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive focus:text-destructive cursor-pointer flex items-center">
                           <Trash2 className="mr-2 h-4 w-4" /> Delete

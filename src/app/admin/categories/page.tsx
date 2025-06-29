@@ -27,6 +27,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 export default async function ManageCategoriesPage() {
   const categories = await getCategories();
@@ -85,8 +86,10 @@ export default async function ManageCategoriesPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem className="cursor-pointer flex items-center">
-                          <Edit className="mr-2 h-4 w-4" /> Edit
+                        <DropdownMenuItem asChild>
+                          <Link href={`/admin/categories/edit/${category.id}`} className="cursor-pointer flex items-center">
+                            <Edit className="mr-2 h-4 w-4" /> Edit
+                          </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive focus:text-destructive cursor-pointer flex items-center">
                           <Trash2 className="mr-2 h-4 w-4" /> Delete
