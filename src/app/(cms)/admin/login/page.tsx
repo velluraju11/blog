@@ -41,8 +41,9 @@ export default function LoginPage() {
         title: "Login Successful",
         description: "Redirecting to dashboard...",
       });
-      // Force a refresh to re-run the middleware and handle the redirect.
-      router.refresh();
+      // Explicitly navigate to the dashboard. The middleware will
+      // already have the new session and allow access.
+      router.push('/admin/dashboard');
     }
   };
 
