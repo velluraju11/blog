@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getPosts } from "@/lib/data";
-import { ArrowUpRight, BookOpen, Users, BarChart } from "lucide-react";
+import { ArrowUpRight, BookOpen, Users, BarChart, Eye } from "lucide-react";
 import Link from "next/link";
 import { Overview } from "./components/overview";
 
@@ -64,7 +64,7 @@ export default async function DashboardPage() {
                     <CardHeader>
                         <CardTitle className="font-headline">Recent Posts</CardTitle>
                         <CardDescription>
-                            A list of your most recently published blog posts.
+                            Your most recently published blog posts.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -72,18 +72,18 @@ export default async function DashboardPage() {
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>Title</TableHead>
-                                    <TableHead>Category</TableHead>
-                                    <TableHead>Actions</TableHead>
+                                    <TableHead className="text-right">Views</TableHead>
+                                    <TableHead className="text-right">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {posts.slice(0, 5).map((post) => (
                                     <TableRow key={post.id}>
-                                        <TableCell className="font-medium">{post.title}</TableCell>
-                                        <TableCell>
-                                            <Badge variant="outline">{post.category.name}</Badge>
+                                        <TableCell className="font-medium max-w-[200px] truncate">{post.title}</TableCell>
+                                        <TableCell className="text-right font-mono text-muted-foreground">
+                                            {post.views?.toLocaleString() ?? 'N/A'}
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell className="text-right">
                                             <Button variant="outline" size="sm" asChild>
                                                 <Link href={`/blog/${post.slug}`} target="_blank">View</Link>
                                             </Button>

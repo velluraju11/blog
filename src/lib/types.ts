@@ -25,4 +25,12 @@ export interface Post {
   focusKeyword?: string;
   isFeatured?: boolean;
   featuredOrder?: number;
+  views?: number;
+  ratings?: {
+    '😍': number;
+    '😊': number;
+    '🤔': number;
+    '😕': number;
+    '😠': number;
+  };
 }

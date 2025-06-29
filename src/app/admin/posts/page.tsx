@@ -25,12 +25,14 @@ import {
   Trash2,
   Eye,
   Star,
+  BarChart2,
 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
@@ -43,7 +45,7 @@ export default async function ManagePostsPage() {
         <div>
           <h1 className="text-3xl font-bold font-headline">Manage Posts</h1>
           <p className="text-muted-foreground">
-            View your posts and see which are featured on the homepage.
+            View, edit, and analyze your posts.
           </p>
         </div>
         <Button asChild className="flex-shrink-0">
@@ -68,11 +70,9 @@ export default async function ManagePostsPage() {
                 <TableHead className="w-12 text-center">Featured</TableHead>
                 <TableHead>Title</TableHead>
                 <TableHead className="hidden md:table-cell">Category</TableHead>
+                <TableHead className="hidden lg:table-cell text-right">Views</TableHead>
                 <TableHead className="hidden md:table-cell">
                   Published
-                </TableHead>
-                <TableHead className="hidden lg:table-cell text-center">
-                  Priority
                 </TableHead>
                 <TableHead>
                   <span className="sr-only">Actions</span>
@@ -95,11 +95,11 @@ export default async function ManagePostsPage() {
                   <TableCell className="hidden md:table-cell">
                     <Badge variant="outline">{post.category.name}</Badge>
                   </TableCell>
+                  <TableCell className="hidden lg:table-cell text-right font-mono text-muted-foreground">
+                    {post.views?.toLocaleString() ?? 'N/A'}
+                  </TableCell>
                   <TableCell className="hidden md:table-cell">
                     {format(new Date(post.publishedAt), "dd MMM, yyyy")}
-                  </TableCell>
-                  <TableCell className="hidden lg:table-cell text-center">
-                    {post.isFeatured ? post.featuredOrder : "N/A"}
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
@@ -116,6 +116,14 @@ export default async function ManagePostsPage() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem asChild>
                           <Link
+                            href={`/admin/stats/${post.slug}`}
+                            className="cursor-pointer w-full flex items-center"
+                          >
+                            <BarChart2 className="mr-2 h-4 w-4" /> View Stats
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link
                             href={`/blog/${post.slug}`}
                             target="_blank"
                             className="cursor-pointer w-full flex items-center"
@@ -123,6 +131,7 @@ export default async function ManagePostsPage() {
                             <Eye className="mr-2 h-4 w-4" /> View Post
                           </Link>
                         </DropdownMenuItem>
+                        <DropdownMenuSeparator />
                         <DropdownMenuItem className="cursor-pointer flex items-center">
                           <Edit className="mr-2 h-4 w-4" /> Edit
                         </DropdownMenuItem>

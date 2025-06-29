@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import type { Metadata } from "next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MessageSquare } from "lucide-react";
+import EmojiFeedback from "./components/emoji-feedback";
 
 type Props = {
   params: { slug: string };
@@ -101,7 +102,9 @@ export default async function BlogPostPage({ params }: Props) {
             ))}
         </div>
 
-        <Card className="mt-12 bg-card/50">
+        <EmojiFeedback />
+
+        <Card className="mt-8 bg-card/50">
           <CardHeader>
             <CardTitle className="font-headline flex items-center gap-2"><MessageSquare className="w-6 h-6" /> Comments</CardTitle>
           </CardHeader>

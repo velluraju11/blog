@@ -68,6 +68,8 @@ This is just the beginning. Welcome to the revolution.
     publishedAt: '2024-07-22T09:00:00Z',
     isFeatured: true,
     featuredOrder: 1,
+    views: 12456,
+    ratings: { '😍': 150, '😊': 300, '🤔': 50, '😕': 10, '😠': 5 },
   },
   {
     id: '1',
@@ -111,6 +113,8 @@ We will continue to monitor the situation and provide updates as they become ava
     focusKeyword: 'Nova-Framework Vulnerability',
     isFeatured: true,
     featuredOrder: 3,
+    views: 8765,
+    ratings: { '😍': 90, '😊': 250, '🤔': 120, '😕': 30, '😠': 15 },
   },
   {
     id: '2',
@@ -147,6 +151,8 @@ The age of AI cyberwarfare is here. Preparing for this new reality is not just a
     focusKeyword: 'AI Cyberwarfare',
     isFeatured: true,
     featuredOrder: 2,
+    views: 10987,
+    ratings: { '😍': 180, '😊': 400, '🤔': 80, '😕': 20, '😠': 8 },
   },
   {
     id: '3',
@@ -177,6 +183,8 @@ The data shows a clear and worrying trend: a lack of basic security hygiene is t
     tags: ['Pentesting', 'Security Report', 'Vulnerabilities'],
     publishedAt: '2024-07-15T09:00:00Z',
     focusKeyword: 'Pentesting Report',
+    views: 7654,
+    ratings: { '😍': 70, '😊': 180, '🤔': 95, '😕': 40, '😠': 12 },
   },
 ];
 
