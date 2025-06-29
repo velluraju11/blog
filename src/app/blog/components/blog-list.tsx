@@ -53,7 +53,7 @@ export default function BlogList({ posts, categories }: BlogListProps) {
 
   return (
     <section className="pb-12">
-      <div className="mb-12 space-y-8">
+      <div className="mb-10 space-y-6">
         <div className="relative max-w-lg mx-auto">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
           <Input
