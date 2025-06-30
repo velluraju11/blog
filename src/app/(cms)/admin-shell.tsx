@@ -15,7 +15,7 @@ import {
   SidebarTrigger,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { Bot, Clock, Cog, FolderKanban, Home, LayoutDashboard, LogOut, Newspaper, ShieldCheck, Users } from "lucide-react";
+import { Bot, Clock, Cog, FolderKanban, Home, LayoutDashboard, LogOut, Newspaper, ShieldCheck, Users, Users2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const menuItems = [
@@ -25,8 +25,9 @@ const menuItems = [
     { href: "/admin/scheduler", label: "Scheduler", icon: Clock },
     { href: "/admin/categories", label: "Categories", icon: FolderKanban },
     { href: "/admin/authors", label: "Authors", icon: Users },
+    { href: "/admin/crew", label: "Crew Members", icon: Users2 },
     { href: "/admin/settings", label: "Settings", icon: Cog },
-]
+];
 
 export default function AdminShell({
   children,
@@ -94,11 +95,13 @@ export default function AdminShell({
           <SidebarMenu>
             {menuItems.map(item => (
                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={item.label}>
-                        <Link href={item.href}>
-                            <item.icon />
-                            <span>{item.label}</span>
-                        </Link>
+                    <SidebarMenuButton 
+                        onClick={() => router.push(item.href)}
+                        isActive={pathname.startsWith(item.href)} 
+                        tooltip={item.label}
+                    >
+                        <item.icon />
+                        <span>{item.label}</span>
                     </SidebarMenuButton>
                  </SidebarMenuItem>
             ))}
