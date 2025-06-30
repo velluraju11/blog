@@ -24,15 +24,13 @@
   aspect-ratio: 3 / 4;
   overflow: hidden;
   border-radius: var(--radius);
-  color: hsl(var(--primary-foreground));
+  box-shadow: 0 4px 15px hsl(var(--foreground) / 0.05);
   transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .chroma-card:hover {
-  transform: scale(1.05);
-  z-index: 10;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px hsl(var(--foreground) / 0.1);
 }
 
 .chroma-card-image {
@@ -41,42 +39,28 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: filter 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .chroma-card:hover .chroma-card-image {
-  filter: blur(8px) brightness(0.5);
-}
-
-.chroma-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top,
-    hsl(var(--background) / 0.8) 0%,
-    hsl(var(--background) / 0.5) 20%,
-    transparent 40%
-  );
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  padding: 1.5rem 1.5rem; /* adjusted padding */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-
-
-.chroma-card:hover .chroma-card-overlay {
-  background: transparent;
-  padding: 1.5rem;
-  justify-content: flex-start;
+  transform: scale(1.05);
 }
 
 .chroma-card-content {
-  position: relative;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  background: linear-gradient(to top, hsl(var(--background)) 20%, hsl(var(--background) / 0.8) 60%, transparent 100%);
+  /* Start with the pane translated down, revealing only its top part */
+  transform: translateY(calc(100% - 90px));
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .chroma-card:hover .chroma-card-content {
-  transform: translateY(0px);
+  transform: translateY(0);
+  background: linear-gradient(to top, hsl(var(--background)) 60%, hsl(var(--background) / 0.9) 100%);
 }
 
 .chroma-card-header .name {
@@ -85,35 +69,24 @@
   font-weight: 700;
   line-height: 1.2;
   color: hsl(var(--foreground));
-  transition: color 0.4s ease;
 }
 
 .chroma-card-header .role {
   font-size: 1rem;
   font-weight: 500;
   color: hsl(var(--primary));
-  transition: color 0.4s ease;
-}
-
-.chroma-card:hover .chroma-card-header .name,
-.chroma-card:hover .chroma-card-header .role {
-  color: hsl(var(--primary-foreground));
+  line-height: 1.2;
 }
 
 .chroma-card-bio {
   margin-top: 1rem;
   font-size: 0.9rem;
   line-height: 1.5;
-  color: hsl(var(--primary-foreground) / 0.85);
+  color: hsl(var(--muted-foreground));
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s, max-height 0.4s ease 0.2s;
-  max-height: 0;
-  overflow: hidden;
+  transition: opacity 0.3s ease 0.1s; /* Delay opacity transition */
 }
 
 .chroma-card:hover .chroma-card-bio {
   opacity: 1;
-  transform: translateY(0);
-  max-height: 200px; /* Adjust as needed */
 }

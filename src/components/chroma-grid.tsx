@@ -34,7 +34,6 @@ export const ChromaGrid = ({
       {items.map((c, i) => (
         <article key={i} className="chroma-card">
           <img src={c.image} alt={c.title} loading="lazy" className="chroma-card-image" />
-          <div className="chroma-card-overlay" />
           <div className="chroma-card-content">
             <header className="chroma-card-header">
               <h3 className="name">{c.title}</h3>
