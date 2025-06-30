@@ -2,7 +2,7 @@
 
 import type { CrewMember } from '@/lib/types';
 import ChromaGrid from '@/components/chroma-grid';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 interface CrewListProps {
   crewMembers: CrewMember[];
@@ -26,15 +26,27 @@ export default function CrewList({ crewMembers }: CrewListProps) {
     ...colors[index % colors.length],
   })), [crewMembers]);
 
-  const numColumns = useMemo(() => {
-    if (typeof window !== 'undefined') {
-        if (window.innerWidth < 768) return 1;
-        if (window.innerWidth < 1124) return 2;
-    }
-    return Math.min(items.length, 3);
+  // Use a state for the number of columns, default to a server-safe value.
+  const [numColumns, setNumColumns] = useState(3); 
+
+  useEffect(() => {
+    // This effect runs only on the client side after the component mounts.
+    const handleResize = () => {
+      let cols = 3;
+      if (window.innerWidth < 768) {
+        cols = 1;
+      } else if (window.innerWidth < 1124) {
+        cols = 2;
+      }
+      setNumColumns(Math.min(items.length, cols) || 1);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, [items.length]);
 
-  const numRows = useMemo(() => Math.ceil(items.length / numColumns), [items.length, numColumns]);
+  const numRows = useMemo(() => Math.ceil(items.length / numColumns) || 1, [items.length, numColumns]);
 
   return (
     <section>
@@ -44,8 +56,8 @@ export default function CrewList({ crewMembers }: CrewListProps) {
             damping={0.45}
             fadeOut={0.6}
             ease="power3.out"
-            columns={numColumns > 0 ? numColumns : 1}
-            rows={numRows > 0 ? numRows : 1}
+            columns={numColumns}
+            rows={numRows}
         />
     </section>
   );
