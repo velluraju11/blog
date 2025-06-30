@@ -26,6 +26,7 @@
   border-radius: var(--radius);
   color: hsl(var(--primary-foreground));
   transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border: 1px solid hsl(var(--border));
 }
 
 .chroma-card:hover {
@@ -54,26 +55,27 @@
     hsl(var(--background) / 0.5) 20%,
     transparent 40%
   );
-  transition: opacity 0.4s ease;
-}
-
-.chroma-card:hover .chroma-card-overlay {
-  opacity: 0;
-}
-
-.chroma-card-content {
-  position: absolute;
-  inset: 0;
+  transition: opacity 0.4s ease, padding 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   padding: 1rem 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  transition: justify-content 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), padding 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+
+.chroma-card:hover .chroma-card-overlay {
+  background: transparent;
+  padding: 1.5rem;
+}
+
+.chroma-card-content {
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .chroma-card:hover .chroma-card-content {
   justify-content: center;
-  padding: 1.5rem;
+  transform: translateY(0px);
 }
 
 .chroma-card-header .name {
@@ -82,12 +84,14 @@
   font-weight: 700;
   line-height: 1.2;
   color: hsl(var(--foreground));
+  transition: color 0.4s ease;
 }
 
 .chroma-card-header .role {
   font-size: 1rem;
   font-weight: 500;
   color: hsl(var(--primary));
+  transition: color 0.4s ease;
 }
 
 .chroma-card:hover .chroma-card-header .name,
@@ -102,10 +106,13 @@
   color: hsl(var(--primary-foreground) / 0.85);
   opacity: 0;
   transform: translateY(10px);
-  transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s; /* Delay the transition */
+  transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s, max-height 0.4s ease 0.2s;
+  max-height: 0;
+  overflow: hidden;
 }
 
 .chroma-card:hover .chroma-card-bio {
   opacity: 1;
   transform: translateY(0);
+  max-height: 200px; /* Adjust as needed */
 }
