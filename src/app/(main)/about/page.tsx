@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from 'next/image';
 import React from "react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function AboutPage() {
   const whatRyhaBuilds = [
@@ -60,9 +61,9 @@ export default function AboutPage() {
                 For a deeper dive into our revolutionary technology and to see our products in action, visit our official company website.
             </p>
             <Button asChild size="lg">
-                <a href="https://ryha.tech" target="_blank" rel="noopener noreferrer">
+                <Link href="https://ryha.tech" target="_blank" rel="noopener noreferrer">
                     Visit ryha.tech <ExternalLink />
-                </a>
+                </Link>
             </Button>
         </section>
         

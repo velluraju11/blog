@@ -32,9 +32,9 @@ export default function Footer() {
         <div className="mt-12 border-t pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
           <p>&copy; {new Date().getFullYear()} Ryha. All Rights Reserved.</p>
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
-            <a href="https://www.youtube.com/@RyhaOfficial" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><Youtube className="w-5 h-5" /></a>
-            <a href="https://instagram.com/vellu.raju" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><Instagram className="w-5 h-5" /></a>
-            <a href="https://linkedin.com/in/velluraju" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><Linkedin className="w-5 h-5" /></a>
+            <Link href="https://www.youtube.com/@RyhaOfficial" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><Youtube className="w-5 h-5" /></Link>
+            <Link href="https://instagram.com/vellu.raju" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><Instagram className="w-5 h-5" /></Link>
+            <Link href="https://linkedin.com/in/velluraju" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><Linkedin className="w-5 h-5" /></Link>
           </div>
         </div>
       </div>

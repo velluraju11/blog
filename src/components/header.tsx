@@ -76,9 +76,9 @@ export default function Header() {
 
         <div className="flex flex-1 items-center justify-end space-x-4">
           <Button asChild>
-            <a href="https://ryha.tech" target="_blank" rel="noopener noreferrer">
+            <Link href="https://ryha.tech" target="_blank" rel="noopener noreferrer">
               Visit ryha.tech
-            </a>
+            </Link>
           </Button>
         </div>
       </div>
