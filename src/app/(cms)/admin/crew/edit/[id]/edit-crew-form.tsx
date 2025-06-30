@@ -20,6 +20,7 @@ const formSchema = z.object({
   role: z.string().min(2, 'Role must be at least 2 characters.'),
   bio: z.string().min(10, 'Bio must be at least 10 characters.'),
   imageUrl: z.string().url('Please enter a valid URL.').optional().or(z.literal('')),
+  order: z.coerce.number().min(1, 'Order must be at least 1.'),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -40,6 +41,7 @@ export default function EditCrewForm({ member }: EditCrewFormProps) {
       role: member.role,
       bio: member.bio,
       imageUrl: member.imageUrl,
+      order: member.order,
     },
   });
 
@@ -93,17 +95,30 @@ export default function EditCrewForm({ member }: EditCrewFormProps) {
                 </FormItem>
               )}
             />
-             <FormField
-              control={form.control}
-              name="role"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Role</FormLabel>
-                  <FormControl><Input placeholder="e.g., Founder & CEO" {...field} /></FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-2 gap-4">
+                <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Role</FormLabel>
+                    <FormControl><Input placeholder="e.g., Founder & CEO" {...field} /></FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField
+                control={form.control}
+                name="order"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Display Order</FormLabel>
+                    <FormControl><Input type="number" min="1" placeholder="1" {...field} /></FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+            </div>
              <FormField
               control={form.control}
               name="bio"

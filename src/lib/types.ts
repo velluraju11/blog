@@ -16,6 +16,7 @@ export interface CrewMember {
   role: string;
   imageUrl: string;
   bio: string;
+  order: number;
 }
 
 export interface Post {

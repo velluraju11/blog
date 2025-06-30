@@ -61,6 +61,7 @@ export default async function ManageCrewPage() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="w-16 text-center">Order</TableHead>
                 <TableHead>Member</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead className="hidden md:table-cell">Bio</TableHead>
@@ -72,6 +73,7 @@ export default async function ManageCrewPage() {
             <TableBody>
               {crewMembers.map((member) => (
                 <TableRow key={member.id}>
+                  <TableCell className="text-center font-mono">{member.order}</TableCell>
                   <TableCell className="font-medium">
                     <div className="flex items-center gap-3">
                         <Avatar>

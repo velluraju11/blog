@@ -31,6 +31,7 @@ const crewMembers: Record<string, CrewMember> = {
     role: 'Founder & Solo Architect',
     imageUrl: 'https://ik.imagekit.io/ps8bybjwy/Screenshot%202025-06-11%20101654.png?updatedAt=1750819846177',
     bio: 'The solo architect, student, and world’s number one hacker aspirant behind Ryha. Building the future, line by line.',
+    order: 1,
   },
   'jane-doe': {
     id: 'jane-doe',
@@ -38,6 +39,7 @@ const crewMembers: Record<string, CrewMember> = {
     role: 'Lead AI Researcher',
     imageUrl: 'https://placehold.co/400x400.png',
     bio: 'Specializing in neural network architecture and autonomous systems, Jane pushes the boundaries of artificial intelligence.',
+    order: 2,
   },
   'john-smith': {
     id: 'john-smith',
@@ -45,6 +47,7 @@ const crewMembers: Record<string, CrewMember> = {
     role: 'Head of Cybersecurity',
     imageUrl: 'https://placehold.co/400x400.png',
     bio: 'With a background in ethical hacking and threat intelligence, John leads the charge in building hyper-secure digital ecosystems.',
+    order: 3,
   },
 };
 
@@ -272,7 +275,7 @@ export async function getAuthorById(id: string): Promise<Author | undefined> {
 
 export async function getCrewMembers(): Promise<CrewMember[]> {
   await new Promise(resolve => setTimeout(resolve, 100));
-  return Object.values(crewMembers);
+  return Object.values(crewMembers).sort((a, b) => a.order - b.order);
 }
 
 export async function getCrewMemberById(id: string): Promise<CrewMember | undefined> {
