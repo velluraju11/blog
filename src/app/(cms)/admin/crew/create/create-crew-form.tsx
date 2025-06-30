@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -44,21 +45,9 @@ export default function CreateCrewForm() {
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    try {
-        await createCrewMember(data);
-        toast({
-          title: 'Crew Member Added!',
-          description: `The new member "${data.name}" has been added.`,
-        });
-    } catch (error) {
-        console.error(error);
-        toast({
-            variant: 'destructive',
-            title: 'Error',
-            description: 'Failed to add crew member.',
-        });
-        setIsLoading(false);
-    }
+    // The server action redirects on success. The try/catch is removed
+    // to prevent the redirect error from being caught and displayed as a form error.
+    await createCrewMember(data);
   };
 
   return (

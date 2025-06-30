@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -51,21 +52,9 @@ export default function EditCrewForm({ member }: EditCrewFormProps) {
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    try {
-        await updateCrewMember(data);
-        toast({
-          title: 'Crew Member Updated!',
-          description: `Details for "${data.name}" have been updated.`,
-        });
-    } catch (error) {
-        console.error(error);
-        toast({
-            variant: 'destructive',
-            title: 'Error',
-            description: 'Failed to update crew member.',
-        });
-        setIsLoading(false);
-    }
+    // The server action redirects on success. The try/catch is removed
+    // to prevent the redirect error from being caught and displayed as a form error.
+    await updateCrewMember(data);
   };
 
   return (
