@@ -83,7 +83,7 @@ export default async function ManageCrewPage() {
                         <span>{member.name}</span>
                     </div>
                   </TableCell>
-                  <TableCell>{member.role}</TableCell>
+                  <TableCell className="max-w-[200px] truncate">{member.role}</TableCell>
                   <TableCell className="hidden md:table-cell max-w-sm truncate text-muted-foreground">
                     {member.bio}
                   </TableCell>

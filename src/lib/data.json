@@ -1,4 +1,3 @@
-
 {
     "authors": {
         "velluraju": {
@@ -44,7 +43,7 @@
         "velluraju": {
             "id": "velluraju",
             "name": "Velluraju",
-            "role": "Founder, Architect & AI Lead",
+            "role": "Founder & Solo Architect",
             "imageUrl": "https://ik.imagekit.io/ps8bybjwy/Screenshot%202025-06-11%20101654.png?updatedAt=1750819846177",
             "bio": "The solo architect, student, and world’s number one hacker aspirant behind Ryha. Building the future, line by line.",
             "order": 1
