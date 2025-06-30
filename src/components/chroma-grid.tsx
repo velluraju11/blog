@@ -8,6 +8,7 @@ interface ChromaGridItem {
   image: string;
   title: string;
   subtitle: string;
+  bio: string;
   handle?: string;
   borderColor?: string;
   gradient?: string;
@@ -82,12 +83,6 @@ export const ChromaGrid = ({
     });
   };
 
-  const handleCardClick = (url: string | undefined) => {
-    if (url) {
-      window.open(url, "_blank", "noopener,noreferrer");
-    }
-  };
-
   const handleCardMove = (e: React.MouseEvent<HTMLElement>) => {
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
@@ -116,24 +111,31 @@ export const ChromaGrid = ({
           key={i}
           className="chroma-card"
           onMouseMove={handleCardMove}
-          onClick={() => handleCardClick(c.url)}
           style={
             {
               "--card-border": c.borderColor || "transparent",
               "--card-gradient": c.gradient,
-              cursor: c.url ? "pointer" : "default",
             } as React.CSSProperties
           }
         >
-          <div className="chroma-img-wrapper">
-            <img src={c.image} alt={c.title} loading="lazy" />
+          <div className="chroma-card-inner">
+            <div className="chroma-card-front">
+              <div className="chroma-img-wrapper">
+                <img src={c.image} alt={c.title} loading="lazy" />
+              </div>
+              <footer className="chroma-info">
+                <h3 className="name">{c.title}</h3>
+                {c.handle && <span className="handle">{c.handle}</span>}
+                <p className="role">{c.subtitle}</p>
+                {c.location && <span className="location">{c.location}</span>}
+              </footer>
+            </div>
+            <div className="chroma-card-back">
+                <h3 className="name">{c.title}</h3>
+                <p className="role">{c.subtitle}</p>
+                <p className="bio">{c.bio}</p>
+            </div>
           </div>
-          <footer className="chroma-info">
-            <h3 className="name">{c.title}</h3>
-            {c.handle && <span className="handle">{c.handle}</span>}
-            <p className="role">{c.subtitle}</p>
-            {c.location && <span className="location">{c.location}</span>}
-          </footer>
         </article>
       ))}
       <div className="chroma-overlay" />

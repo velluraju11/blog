@@ -22,6 +22,7 @@ export default function CrewList({ crewMembers }: CrewListProps) {
     image: member.imageUrl,
     title: member.name,
     subtitle: member.role,
+    bio: member.bio,
     handle: `@${member.name.toLowerCase().replace(/\s/g, '')}`,
     ...colors[index % colors.length],
   })), [crewMembers]);
