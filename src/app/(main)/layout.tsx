@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     title: 'Ryha – The Future, Engineered for Everyone',
     description: 'Ryha builds AI-native ecosystems where machines work for you — intelligently, securely, and forever.',
     type: 'website',
-    url: 'https://ryha.in',
+    url: 'https://ryha.tech',
     images: [
       {
         url: 'https://ik.imagekit.io/ps8bybjwy/Screenshot%202025-06-11%20101654.png?updatedAt=1750819846177',
