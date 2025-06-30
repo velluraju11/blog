@@ -25,13 +25,14 @@
   overflow: hidden;
   border-radius: var(--radius);
   color: hsl(var(--primary-foreground));
-  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  border: 1px solid hsl(var(--border));
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .chroma-card:hover {
   transform: scale(1.05);
   z-index: 10;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
 }
 
 .chroma-card-image {
@@ -55,8 +56,8 @@
     hsl(var(--background) / 0.5) 20%,
     transparent 40%
   );
-  transition: opacity 0.4s ease, padding 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  padding: 1rem 1.5rem;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  padding: 1.5rem 1.5rem; /* adjusted padding */
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -66,15 +67,15 @@
 .chroma-card:hover .chroma-card-overlay {
   background: transparent;
   padding: 1.5rem;
+  justify-content: flex-start;
 }
 
 .chroma-card-content {
   position: relative;
-  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .chroma-card:hover .chroma-card-content {
-  justify-content: center;
   transform: translateY(0px);
 }
 
