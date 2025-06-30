@@ -11,10 +11,6 @@
   margin: 0 auto;
   padding: 1rem;
   box-sizing: border-box;
-
-  --x: 50%;
-  --y: 50%;
-  --r: 220px;
 }
 
 @media (max-width: 1124px) {
@@ -35,206 +31,98 @@
 
 .chroma-card {
   position: relative;
-  display: flex;
-  flex-direction: column;
   width: 320px;
   height: 420px;
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid hsl(var(--border));
-  background: transparent;
-  perspective: 1000px;
-  transition: border-color 0.4s ease, transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: hsl(var(--card));
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   --mouse-x: 50%;
   --mouse-y: 50%;
-  --spotlight-color: rgba(255, 255, 255, 0.3);
-}
-
-.chroma-card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.8s cubic-bezier(0.76, 0, 0.24, 1);
-    transform-style: preserve-3d;
-}
-
-.chroma-card:hover .chroma-card-inner {
-    transform: rotateY(180deg);
-}
-
-.chroma-card-front, .chroma-card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    background: var(--card-gradient);
-}
-
-.chroma-card-back {
-    transform: rotateY(180deg);
-    padding: 2rem;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: hsl(var(--foreground));
-}
-
-.chroma-card-back > * {
-  opacity: 0;
-  transform: translateY(1rem);
-  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s, opacity 0.4s ease-out 0.3s;
-}
-
-.chroma-card:hover .chroma-card-back > * {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.chroma-card-back .name {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 1.25rem;
-    margin-bottom: 0.25rem;
-}
-
-.chroma-card-back .role {
-    color: hsl(var(--muted-foreground));
-    font-size: 0.875rem;
-    margin-bottom: 1rem;
-}
-
-.chroma-card-back .bio {
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: hsl(var(--muted-foreground));
+  --spotlight-color: rgba(255, 255, 255, 0.15);
 }
 
 .chroma-card:hover {
   border-color: var(--card-border);
-  transform: scale(1.05) translateY(-5px);
+  transform: scale(1.05) translateY(-10px);
+  box-shadow: 0 20px 30px -10px hsla(var(--primary), 0.2);
   z-index: 10;
 }
 
-.dark .chroma-card-front::before {
+.dark .chroma-card::after {
   content: "";
   position: absolute;
   inset: 0;
   background: radial-gradient(circle at var(--mouse-x) var(--mouse-y),
       var(--spotlight-color),
-      transparent 70%);
+      transparent 170px);
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s ease;
-  z-index: 2;
+  z-index: 3; /* Above content, below hover effects */
   border-radius: 20px;
 }
 
-.chroma-card:hover .chroma-card-front::before {
+.chroma-card:hover::after {
   opacity: 1;
 }
 
-.chroma-img-wrapper {
-  position: relative;
-  z-index: 1;
-  flex: 1;
-  padding: 10px;
-  box-sizing: border-box;
-  background: transparent;
-  transition: background 0.3s ease;
-}
-
-.chroma-img-wrapper img {
+.chroma-card-image {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 10px;
-  display: block;
+  z-index: 0;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.chroma-info {
-  position: relative;
+.chroma-card:hover .chroma-card-image {
+    transform: scale(1.1);
+}
+
+.chroma-card-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 1;
-  padding: 0.75rem 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(to top, hsla(var(--card), 1) 20%, hsla(var(--card), 0.8) 70%, transparent 100%);
+  transform: translateY(calc(100% - 90px));
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.chroma-card:hover .chroma-card-content {
+  transform: translateY(0);
+}
+
+.chroma-card-header .name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.2;
   color: hsl(var(--foreground));
-  font-family: Inter, sans-serif;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  row-gap: 0.25rem;
-  column-gap: 0.75rem;
+  margin-bottom: 0.25rem;
 }
 
-.chroma-info .name {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
+.chroma-card-header .role {
+  font-size: 0.875rem;
+  color: hsl(var(--primary));
+  font-weight: 500;
 }
 
-.chroma-info .role,
-.chroma-info .handle {
+.chroma-card-bio {
+  padding-top: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
   color: hsl(var(--muted-foreground));
+  opacity: 0;
+  transition: opacity 0.3s ease 0.2s; /* Delay the opacity transition */
 }
 
-.chroma-overlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 3;
-  backdrop-filter: grayscale(1) brightness(0.78);
-  -webkit-backdrop-filter: grayscale(1) brightness(0.78);
-  background: rgba(0, 0, 0, 0.001);
-
-  mask-image: radial-gradient(circle var(--r) at var(--x) var(--y),
-      transparent 0%,
-      transparent 15%,
-      rgba(0, 0, 0, 0.10) 30%,
-      rgba(0, 0, 0, 0.22) 45%,
-      rgba(0, 0, 0, 0.35) 60%,
-      rgba(0, 0, 0, 0.50) 75%,
-      rgba(0, 0, 0, 0.68) 88%,
-      white 100%);
-  -webkit-mask-image: radial-gradient(circle var(--r) at var(--x) var(--y),
-      transparent 0%,
-      transparent 15%,
-      rgba(0, 0, 0, 0.10) 30%,
-      rgba(0, 0, 0, 0.22) 45%,
-      rgba(0, 0, 0, 0.35) 60%,
-      rgba(0, 0, 0, 0.50) 75%,
-      rgba(0, 0, 0, 0.68) 88%,
-      white 100%);
-}
-
-.chroma-fade {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 4;
-  backdrop-filter: grayscale(1) brightness(0.78);
-  -webkit-backdrop-filter: grayscale(1) brightness(0.78);
-  background: rgba(0, 0, 0, 0.001);
-
-  mask-image: radial-gradient(circle var(--r) at var(--x) var(--y),
-      white 0%,
-      white 15%,
-      rgba(255, 255, 255, 0.90) 30%,
-      rgba(255, 255, 255, 0.78) 45%,
-      rgba(255, 255, 255, 0.65) 60%,
-      rgba(255, 255, 255, 0.50) 75%,
-      rgba(255, 255, 255, 0.32) 88%,
-      transparent 100%);
-  -webkit-mask-image: radial-gradient(circle var(--r) at var(--x) var(--y),
-      white 0%,
-      white 15%,
-      rgba(255, 255, 255, 0.90) 30%,
-      rgba(255, 255, 255, 0.78) 45%,
-      rgba(255, 255, 255, 0.65) 60%,
-      rgba(255, 255, 255, 0.50) 75%,
-      rgba(255, 255, 255, 0.32) 88%,
-      transparent 100%);
-
+.chroma-card:hover .chroma-card-bio {
   opacity: 1;
-  transition: opacity 0.25s ease;
 }
