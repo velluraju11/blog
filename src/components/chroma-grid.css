@@ -38,13 +38,13 @@
   display: flex;
   flex-direction: column;
   width: 320px;
-  height: 420px; /* Give it a fixed height for the flip effect */
+  height: 420px;
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid hsl(var(--border));
-  background: transparent; /* The gradient is on the faces now */
-  perspective: 1000px; /* Add perspective for 3D effect */
-  transition: border-color 0.3s ease;
+  background: transparent;
+  perspective: 1000px;
+  transition: border-color 0.4s ease, transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   --mouse-x: 50%;
   --mouse-y: 50%;
@@ -55,7 +55,7 @@
     position: relative;
     width: 100%;
     height: 100%;
-    transition: transform 0.8s;
+    transition: transform 0.8s cubic-bezier(0.76, 0, 0.24, 1);
     transform-style: preserve-3d;
 }
 
@@ -67,7 +67,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    -webkit-backface-visibility: hidden; /* Safari */
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     border-radius: 20px;
     display: flex;
@@ -82,6 +82,17 @@
     align-items: center;
     text-align: center;
     color: hsl(var(--foreground));
+}
+
+.chroma-card-back > * {
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s, opacity 0.4s ease-out 0.3s;
+}
+
+.chroma-card:hover .chroma-card-back > * {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .chroma-card-back .name {
@@ -103,9 +114,10 @@
     color: hsl(var(--muted-foreground));
 }
 
-
 .chroma-card:hover {
   border-color: var(--card-border);
+  transform: scale(1.05) translateY(-5px);
+  z-index: 10;
 }
 
 .dark .chroma-card-front::before {
