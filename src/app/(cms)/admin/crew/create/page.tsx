@@ -1,3 +1,5 @@
+import CreateCrewForm from "./create-crew-form";
+
 export default function CreateCrewMemberPage() {
   return (
     <div className="space-y-8">
@@ -7,7 +9,7 @@ export default function CreateCrewMemberPage() {
           Fill in the details to add a new crew member.
         </p>
       </div>
-      {/* The form will be added in a future step. */}
+      <CreateCrewForm />
     </div>
   );
 }

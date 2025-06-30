@@ -1,4 +1,4 @@
-import type { Post, Author, Category } from '@/lib/types';
+import type { Post, Author, Category, CrewMember } from '@/lib/types';
 
 const authors: Record<string, Author> = {
   'velluraju': {
@@ -22,6 +22,30 @@ const categories: Record<string, Category> = {
   'updates': { id: 'updates', name: 'Updates' },
   'cyberwarfare': { id: 'cyberwarfare', name: 'Cyberwarfare' },
   'manifesto': { id: 'manifesto', name: 'Manifesto' },
+};
+
+const crewMembers: Record<string, CrewMember> = {
+  'velluraju': {
+    id: 'velluraju',
+    name: 'Velluraju',
+    role: 'Founder & Solo Architect',
+    imageUrl: 'https://ik.imagekit.io/ps8bybjwy/Screenshot%202025-06-11%20101654.png?updatedAt=1750819846177',
+    bio: 'The solo architect, student, and world’s number one hacker aspirant behind Ryha. Building the future, line by line.',
+  },
+  'jane-doe': {
+    id: 'jane-doe',
+    name: 'Jane Doe',
+    role: 'Lead AI Researcher',
+    imageUrl: 'https://placehold.co/400x400.png',
+    bio: 'Specializing in neural network architecture and autonomous systems, Jane pushes the boundaries of artificial intelligence.',
+  },
+  'john-smith': {
+    id: 'john-smith',
+    name: 'John Smith',
+    role: 'Head of Cybersecurity',
+    imageUrl: 'https://placehold.co/400x400.png',
+    bio: 'With a background in ethical hacking and threat intelligence, John leads the charge in building hyper-secure digital ecosystems.',
+  },
 };
 
 const posts: Post[] = [
@@ -244,4 +268,14 @@ export async function getAuthorById(id: string): Promise<Author | undefined> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 100));
   return Object.values(authors).find(auth => auth.id === id);
+}
+
+export async function getCrewMembers(): Promise<CrewMember[]> {
+  await new Promise(resolve => setTimeout(resolve, 100));
+  return Object.values(crewMembers);
+}
+
+export async function getCrewMemberById(id: string): Promise<CrewMember | undefined> {
+  await new Promise(resolve => setTimeout(resolve, 100));
+  return Object.values(crewMembers).find(member => member.id === id);
 }

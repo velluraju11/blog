@@ -10,6 +10,14 @@ export interface Author {
   bio: string;
 }
 
+export interface CrewMember {
+  id: string;
+  name: string;
+  role: string;
+  imageUrl: string;
+  bio: string;
+}
+
 export interface Post {
   id: string;
   slug: string;
