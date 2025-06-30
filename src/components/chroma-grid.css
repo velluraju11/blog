@@ -64,15 +64,16 @@
 .chroma-card-content {
   position: absolute;
   inset: 0;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  transition: justify-content 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: justify-content 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), padding 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .chroma-card:hover .chroma-card-content {
   justify-content: center;
+  padding: 1.5rem;
 }
 
 .chroma-card-header .name {
