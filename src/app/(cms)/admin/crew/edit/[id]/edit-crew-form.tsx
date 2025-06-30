@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -14,8 +13,10 @@ import { Loader2, Save } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { CrewMember } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { updateCrewMember } from '../../actions';
 
 const formSchema = z.object({
+  id: z.string(),
   name: z.string().min(2, 'Name must be at least 2 characters.'),
   role: z.string().min(2, 'Role must be at least 2 characters.'),
   bio: z.string().min(10, 'Bio must be at least 10 characters.'),
@@ -30,13 +31,13 @@ interface EditCrewFormProps {
 }
 
 export default function EditCrewForm({ member }: EditCrewFormProps) {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      id: member.id,
       name: member.name,
       role: member.role,
       bio: member.bio,
@@ -50,13 +51,21 @@ export default function EditCrewForm({ member }: EditCrewFormProps) {
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    toast({
-      title: 'Crew Member Updated!',
-      description: `Details for "${data.name}" have been updated.`,
-    });
-    setIsLoading(false);
-    router.push('/admin/crew');
-    router.refresh();
+    try {
+        await updateCrewMember(data);
+        toast({
+          title: 'Crew Member Updated!',
+          description: `Details for "${data.name}" have been updated.`,
+        });
+    } catch (error) {
+        console.error(error);
+        toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: 'Failed to update crew member.',
+        });
+        setIsLoading(false);
+    }
   };
 
   return (

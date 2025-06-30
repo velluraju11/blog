@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -12,8 +11,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Loader2, Save } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { Category } from '@/lib/types';
+import { updateCategory } from '../../actions';
 
 const formSchema = z.object({
+  id: z.string(),
   name: z.string().min(2, 'Category name must be at least 2 characters.'),
 });
 
@@ -24,26 +25,34 @@ interface EditCategoryFormProps {
 }
 
 export default function EditCategoryForm({ category }: EditCategoryFormProps) {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      id: category.id,
       name: category.name,
     },
   });
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    toast({
-      title: 'Category Updated!',
-      description: `The category "${data.name}" has been updated.`,
-    });
-    setIsLoading(false);
-    router.push('/admin/categories');
-    router.refresh();
+    try {
+        await updateCategory(data);
+        toast({
+            title: 'Category Updated!',
+            description: `The category "${data.name}" has been updated.`,
+        });
+    } catch(error) {
+        console.error(error);
+        toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: 'Failed to update category.',
+        });
+        setIsLoading(false);
+    }
   };
 
   return (

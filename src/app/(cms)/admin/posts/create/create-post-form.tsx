@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -12,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Loader2, PlusCircle, Calendar as CalendarIcon, Clock } from 'lucide-react';
+import { Loader2, PlusCircle, Calendar as CalendarIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { Category, Author } from '@/lib/types';
 import dynamic from 'next/dynamic';
@@ -21,6 +20,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { createPost } from '../actions';
 
 const RichTextEditor = dynamic(() => import('@/components/rich-text-editor'), { ssr: false });
 
@@ -33,26 +33,16 @@ const formSchema = z.object({
   tags: z.string().optional(),
   isFeatured: z.boolean().default(false),
   publishAction: z.enum(['draft', 'now', 'schedule']).default('now'),
-  scheduledDate: z.date().optional(),
-  scheduledTime: z.string().optional(),
+  scheduledAt: z.date().optional(),
 }).refine(data => {
     if (data.publishAction === 'schedule') {
-        if (!data.scheduledDate || !data.scheduledTime) {
-            return false;
-        }
-        const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
-        if (!timeRegex.test(data.scheduledTime)) {
-            return false;
-        }
-        const [hours, minutes] = data.scheduledTime.split(':').map(Number);
-        const scheduledDateTime = new Date(data.scheduledDate);
-        scheduledDateTime.setHours(hours, minutes, 0, 0);
-        return scheduledDateTime > new Date();
+        if (!data.scheduledAt) return false;
+        return data.scheduledAt > new Date();
     }
     return true;
 }, {
-  message: "Scheduled date and time must be a valid time in the future.",
-  path: ["scheduledTime"],
+  message: "Scheduled date must be in the future.",
+  path: ["scheduledAt"],
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -63,7 +53,6 @@ interface CreatePostFormProps {
 }
 
 export default function CreatePostForm({ categories, authors }: CreatePostFormProps) {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -78,8 +67,7 @@ export default function CreatePostForm({ categories, authors }: CreatePostFormPr
       tags: '',
       isFeatured: false,
       publishAction: 'now',
-      scheduledDate: undefined,
-      scheduledTime: undefined,
+      scheduledAt: undefined,
     },
   });
 
@@ -87,14 +75,21 @@ export default function CreatePostForm({ categories, authors }: CreatePostFormPr
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    
-    toast({
-      title: 'Post Created!',
-      description: `The post "${data.title}" has been created.`,
-    });
-    setIsLoading(false);
-    router.push('/admin/posts');
-    router.refresh();
+    try {
+        await createPost(data);
+        toast({
+          title: 'Post Created!',
+          description: `The post "${data.title}" has been created successfully.`,
+        });
+    } catch (error) {
+        console.error(error);
+        toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: 'Failed to create post.',
+        });
+        setIsLoading(false);
+    }
   };
 
   return (
@@ -247,7 +242,7 @@ export default function CreatePostForm({ categories, authors }: CreatePostFormPr
                     <div className="space-y-4">
                         <FormField
                         control={form.control}
-                        name="scheduledDate"
+                        name="scheduledAt"
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
                             <FormLabel>Schedule Date</FormLabel>
@@ -273,22 +268,6 @@ export default function CreatePostForm({ categories, authors }: CreatePostFormPr
                                 />
                                 </PopoverContent>
                             </Popover>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                        />
-                        <FormField
-                        control={form.control}
-                        name="scheduledTime"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Schedule Time</FormLabel>
-                            <FormControl>
-                                <div className="relative">
-                                    <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                    <Input type="time" {...field} className="pl-10" />
-                                </div>
-                            </FormControl>
                             <FormMessage />
                             </FormItem>
                         )}

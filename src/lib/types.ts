@@ -19,7 +19,8 @@ export interface CrewMember {
   order: number;
 }
 
-export interface Post {
+// This represents the data as stored in data.json
+export interface RawPost {
   id: string;
   slug: string;
   title: string;
@@ -27,8 +28,8 @@ export interface Post {
   content: string;
   imageUrl: string;
   imageHint: string;
-  author: Author;
-  category: Category;
+  authorId: string;
+  categoryId: string;
   tags: string[];
   publishedAt: string;
   status: 'published' | 'draft' | 'scheduled';
@@ -43,4 +44,10 @@ export interface Post {
     '😊': number;
     '😍': number;
   };
+}
+
+// This represents the "hydrated" post with full author and category objects.
+export interface Post extends Omit<RawPost, 'authorId' | 'categoryId'> {
+  author: Author;
+  category: Category;
 }

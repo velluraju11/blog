@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -12,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Loader2, Save, Calendar as CalendarIcon, Clock } from 'lucide-react';
+import { Loader2, Save, Calendar as CalendarIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { Post, Category, Author } from '@/lib/types';
 import dynamic from 'next/dynamic';
@@ -21,10 +20,13 @@ import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { updatePost } from '../../actions';
 
 const RichTextEditor = dynamic(() => import('@/components/rich-text-editor'), { ssr: false });
 
 const formSchema = z.object({
+  id: z.string(),
+  slug: z.string(),
   title: z.string().min(5, 'Title must be at least 5 characters.'),
   excerpt: z.string().min(10, 'Excerpt must be at least 10 characters.'),
   content: z.string().min(50, 'Content must be at least 50 characters.'),
@@ -33,26 +35,16 @@ const formSchema = z.object({
   tags: z.string().optional(),
   isFeatured: z.boolean().default(false),
   publishAction: z.enum(['draft', 'now', 'schedule']).default('now'),
-  scheduledDate: z.date().optional(),
-  scheduledTime: z.string().optional(),
+  scheduledAt: z.date().optional(),
 }).refine(data => {
     if (data.publishAction === 'schedule') {
-        if (!data.scheduledDate || !data.scheduledTime) {
-            return false;
-        }
-        const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
-        if (!timeRegex.test(data.scheduledTime)) {
-            return false;
-        }
-        const [hours, minutes] = data.scheduledTime.split(':').map(Number);
-        const scheduledDateTime = new Date(data.scheduledDate);
-        scheduledDateTime.setHours(hours, minutes, 0, 0);
-        return scheduledDateTime > new Date();
+        if (!data.scheduledAt) return false;
+        return data.scheduledAt > new Date();
     }
     return true;
 }, {
   message: "Scheduled date and time must be a valid time in the future.",
-  path: ["scheduledTime"],
+  path: ["scheduledAt"],
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -64,7 +56,6 @@ interface EditPostFormProps {
 }
 
 export default function EditPostForm({ post, categories, authors }: EditPostFormProps) {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   
@@ -77,6 +68,8 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      id: post.id,
+      slug: post.slug,
       title: post.title,
       excerpt: post.excerpt,
       content: post.content,
@@ -85,8 +78,7 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
       tags: post.tags.join(', '),
       isFeatured: post.isFeatured || false,
       publishAction: getInitialPublishAction(),
-      scheduledDate: post.status === 'scheduled' && post.publishedAt ? new Date(post.publishedAt) : undefined,
-      scheduledTime: post.status === 'scheduled' && post.publishedAt ? format(new Date(post.publishedAt), 'HH:mm') : undefined,
+      scheduledAt: post.status === 'scheduled' && post.publishedAt ? new Date(post.publishedAt) : undefined,
     },
   });
 
@@ -95,15 +87,21 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
     
-    // In a real app, you would transform `data` before sending to your backend.
-    
-    toast({
-      title: 'Post Updated!',
-      description: 'The changes have been saved successfully.',
-    });
-    setIsLoading(false);
-    router.push('/admin/posts');
-    router.refresh();
+    try {
+        await updatePost(data);
+        toast({
+          title: 'Post Updated!',
+          description: 'The changes have been saved successfully.',
+        });
+    } catch (error) {
+        console.error(error);
+        toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: 'Failed to update post.',
+        });
+        setIsLoading(false);
+    }
   };
 
   return (
@@ -256,7 +254,7 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
                     <div className="space-y-4">
                         <FormField
                         control={form.control}
-                        name="scheduledDate"
+                        name="scheduledAt"
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
                             <FormLabel>Schedule Date</FormLabel>
@@ -282,22 +280,6 @@ export default function EditPostForm({ post, categories, authors }: EditPostForm
                                 />
                                 </PopoverContent>
                             </Popover>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                        />
-                        <FormField
-                        control={form.control}
-                        name="scheduledTime"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Schedule Time</FormLabel>
-                            <FormControl>
-                                <div className="relative">
-                                    <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                    <Input type="time" {...field} className="pl-10" />
-                                </div>
-                            </FormControl>
                             <FormMessage />
                             </FormItem>
                         )}

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -11,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Loader2, PlusCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { createCategory } from '../actions';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Category name must be at least 2 characters.'),
@@ -20,7 +20,6 @@ type FormData = z.infer<typeof formSchema>;
 
 
 export default function CreateCategoryForm() {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -33,14 +32,21 @@ export default function CreateCategoryForm() {
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    // In a real app, you would send this to a server action or API to create the category.
-    toast({
-      title: 'Category Created!',
-      description: `The new category "${data.name}" has been created.`,
-    });
-    setIsLoading(false);
-    router.push('/admin/categories');
-    router.refresh();
+    try {
+        await createCategory(data);
+        toast({
+          title: 'Category Created!',
+          description: `The new category "${data.name}" has been created.`,
+        });
+    } catch (error) {
+        console.error(error);
+        toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: 'Failed to create category.',
+        });
+        setIsLoading(false);
+    }
   };
 
   return (

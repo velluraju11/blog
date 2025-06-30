@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -13,6 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Loader2, PlusCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { createCrewMember } from '../actions';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -25,7 +25,6 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export default function CreateCrewForm() {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -45,14 +44,21 @@ export default function CreateCrewForm() {
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    // In a real app, you would send this to a server action or API to create the member.
-    toast({
-      title: 'Crew Member Added!',
-      description: `The new member "${data.name}" has been added.`,
-    });
-    setIsLoading(false);
-    router.push('/admin/crew');
-    router.refresh();
+    try {
+        await createCrewMember(data);
+        toast({
+          title: 'Crew Member Added!',
+          description: `The new member "${data.name}" has been added.`,
+        });
+    } catch (error) {
+        console.error(error);
+        toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: 'Failed to add crew member.',
+        });
+        setIsLoading(false);
+    }
   };
 
   return (

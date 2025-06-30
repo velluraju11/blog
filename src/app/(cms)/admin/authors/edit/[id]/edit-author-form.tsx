@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -14,8 +13,10 @@ import { Loader2, Save } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { Author } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { updateAuthor } from '../../actions';
 
 const formSchema = z.object({
+  id: z.string(),
   name: z.string().min(2, 'Name must be at least 2 characters.'),
   bio: z.string().min(10, 'Bio must be at least 10 characters.'),
   avatarUrl: z.string().url('Please enter a valid URL.').optional().or(z.literal('')),
@@ -28,13 +29,13 @@ interface EditAuthorFormProps {
 }
 
 export default function EditAuthorForm({ author }: EditAuthorFormProps) {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      id: author.id,
       name: author.name,
       bio: author.bio,
       avatarUrl: author.avatarUrl,
@@ -46,13 +47,21 @@ export default function EditAuthorForm({ author }: EditAuthorFormProps) {
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    toast({
-      title: 'Author Updated!',
-      description: `The author "${data.name}" has been updated.`,
-    });
-    setIsLoading(false);
-    router.push('/admin/authors');
-    router.refresh();
+    try {
+        await updateAuthor(data);
+        toast({
+            title: 'Author Updated!',
+            description: `The author "${data.name}" has been updated.`,
+        });
+    } catch (error) {
+        console.error(error);
+        toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: 'Failed to update author.',
+        });
+        setIsLoading(false);
+    }
   };
 
   return (
