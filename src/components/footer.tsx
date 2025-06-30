@@ -19,8 +19,10 @@ export default function Footer() {
           <div>
             <h4 className="font-headline font-semibold text-foreground mb-4">Navigate</h4>
             <ul className="space-y-2 text-sm">
+              <li><Link href="/" className="hover:text-primary transition-colors">Home</Link></li>
               <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
               <li><Link href="/blog" className="hover:text-primary transition-colors">Blog</Link></li>
+              <li><Link href="/crew" className="hover:text-primary transition-colors">Crew Members</Link></li>
             </ul>
           </div>
           <div>
