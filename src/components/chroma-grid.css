@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: repeat(var(--cols, 3), 1fr);
   gap: 1.5rem;
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
@@ -21,9 +21,10 @@
 
 .chroma-card {
   position: relative;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
   border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
   box-shadow: 0 4px 15px hsl(var(--foreground) / 0.05);
   transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -52,7 +53,7 @@
   left: 0;
   right: 0;
   padding: 1.5rem;
-  background: linear-gradient(to top, hsl(var(--background)) 20%, hsl(var(--background) / 0.8) 60%, transparent 100%);
+  background: linear-gradient(to top, hsl(var(--background)) 60%, hsl(var(--background) / 0.9) 100%);
   /* Start with the pane translated down, revealing only its top part */
   transform: translateY(calc(100% - 90px));
   transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -60,7 +61,6 @@
 
 .chroma-card:hover .chroma-card-content {
   transform: translateY(0);
-  background: linear-gradient(to top, hsl(var(--background)) 60%, hsl(var(--background) / 0.9) 100%);
 }
 
 .chroma-card-header .name {
